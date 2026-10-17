@@ -1,0 +1,17 @@
+/// <reference types="vite/client" />
+
+declare const __BROWSER__: 'chromium' | 'firefox' | 'safari'
+
+declare const __MOTRIX_BUILD__: 'webstore' | 'full' | undefined
+declare const __NIO_BUILD__: 'webstore' | 'full' | undefined
+
+declare module 'virtual:nio-adapter-registry' {
+  import type { SiteAdapter } from '@/adapters/SiteAdapter'
+
+  export const adapterRegistry: SiteAdapter[]
+}
+
+declare module 'virtual:nio-youtube-sniffer-script' {
+  const scriptPath: string | null
+  export default scriptPath
+}

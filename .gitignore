@@ -1,0 +1,106 @@
+# Dependencies
+node_modules/
+/.pnpm-store/
+
+# Build and package output
+dist/
+dist-ssr/
+release/
+out/
+build/
+output/
+target/
+artifacts/
+web-ext-artifacts/
+web-ext-profile/
+chrome-profile/
+firefox-profile/
+.web-extension-id
+*.crx
+*.xpi
+nio-downloader-extension-*.zip
+SHA256SUMS.txt
+*.tsbuildinfo
+
+# Test and coverage output
+coverage/
+.nyc_output/
+.vitest/
+playwright-report/
+test-results/
+*.lcov
+__pycache__/
+
+# Tooling and caches
+.cache
+.cache/
+.vite/
+.vite-inspect/
+.turbo/
+vite.config.*.timestamp-*
+vitest.config.*.timestamp-*
+
+# Temporary files and logs
+tmp/
+temp/
+.tmp/
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+*.log
+debug.log*
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Apple, Swift and Safari native build artifacts
+native/safari/.build/
+.swiftpm/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Secrets, certificates and credentials
+*.pem
+*.key
+*.p12
+*.p8
+*.pfx
+*.mobileprovision
+
+# Local environment overrides
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Editors and IDEs
+.vscode/
+.idea/
+.fleet/
+.zed/
+.history/
+*.swp
+*.swo
+
+# AI agents and tool artifacts
+AGENTS.md
+GEMINI.md
+CLAUDE.md
+.gemini/
+.agent/
+.codex/
+
+# Operating system metadata
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+Thumbs.db
+Desktop.ini
+
+# Repository-local worktrees
+.worktrees/

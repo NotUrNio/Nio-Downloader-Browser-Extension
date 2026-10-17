@@ -1,0 +1,8 @@
+# Solo-maintainer ownership. The solo ruleset does not require self-approval.
+/.github/ @NotUrNio
+/scripts/ @NotUrNio
+/package.json @NotUrNio
+/pnpm-lock.yaml @NotUrNio
+/pnpm-workspace.yaml @NotUrNio
+/patches/ @NotUrNio
+/src/__tests__/store-submission.test.ts @NotUrNio

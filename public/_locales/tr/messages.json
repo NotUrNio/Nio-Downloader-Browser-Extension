@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Nio Downloader Uzantısı",
+    "description": "Extension name shown in the browser and in store listings."
+  },
+  "appDescription": {
+    "message": "Resmî Nio Downloader Tarayıcı Uzantısı. İndirmeleri Nio Downloader'e gönderin.",
+    "description": "Short summary shown under the name in the browser and in store listings."
+  }
+}

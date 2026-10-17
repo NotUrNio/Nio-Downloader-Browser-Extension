@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "افزونهٔ Nio Downloader",
+    "description": "Extension name shown in the browser and in store listings."
+  },
+  "appDescription": {
+    "message": "افزونهٔ رسمی Nio Downloader برای مرورگر. دانلودها را به Nio Downloader بفرستید.",
+    "description": "Short summary shown under the name in the browser and in store listings."
+  }
+}

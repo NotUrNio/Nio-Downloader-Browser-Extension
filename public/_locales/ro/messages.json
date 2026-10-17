@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Extensia Nio Downloader",
+    "description": "Extension name shown in the browser and in store listings."
+  },
+  "appDescription": {
+    "message": "Extensia oficială Nio Downloader pentru browser. Trimite descărcările către Nio Downloader.",
+    "description": "Short summary shown under the name in the browser and in store listings."
+  }
+}

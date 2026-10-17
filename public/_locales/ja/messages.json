@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Nio Downloader 拡張機能",
+    "description": "Extension name shown in the browser and in store listings."
+  },
+  "appDescription": {
+    "message": "Nio Downloader 公式ブラウザー拡張機能。ダウンロードを Nio Downloader に送信します。",
+    "description": "Short summary shown under the name in the browser and in store listings."
+  }
+}

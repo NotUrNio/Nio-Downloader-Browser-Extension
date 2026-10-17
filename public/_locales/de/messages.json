@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Nio Downloader-Erweiterung",
+    "description": "Extension name shown in the browser and in store listings."
+  },
+  "appDescription": {
+    "message": "Offizielle Nio Downloader-Browsererweiterung. Downloads an Nio Downloader senden.",
+    "description": "Short summary shown under the name in the browser and in store listings."
+  }
+}
