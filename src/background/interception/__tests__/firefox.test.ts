@@ -129,7 +129,7 @@ describe('handleFirefoxDownloadSafely', () => {
   it.each(['', '10'])(
     'uses the chosen handler for unknown TXT sizes with threshold %s',
     async (thresholdMB) => {
-      for (const unknownSizeAction of ['chrome', 'motrix'] as const) {
+      for (const unknownSizeAction of ['chrome', 'nio'] as const) {
         vi.clearAllMocks()
         vi.mocked(probeTarget).mockResolvedValue({
           sizeBytes: null,
@@ -153,7 +153,7 @@ describe('handleFirefoxDownloadSafely', () => {
           } as unknown as ChromiumInterceptionDeps
         )
         expect(runHandoff).toHaveBeenCalledTimes(
-          unknownSizeAction === 'motrix' ? 1 : 0
+          unknownSizeAction === 'nio' ? 1 : 0
         )
         expect(probeTarget).toHaveBeenCalledOnce()
       }
@@ -187,7 +187,7 @@ describe('handleFirefoxDownloadSafely', () => {
         getConfig: async () => ({
           enabled: true,
           downloadMode: 'confirm',
-          defaultAction: 'motrix',
+          defaultAction: 'nio',
           rules: [],
         }),
         captureGuard: async () => ({ origin: 'auto', assertCurrent: vi.fn() }),
@@ -217,8 +217,8 @@ describe('handleFirefoxDownloadSafely', () => {
       {
         getConfig: async () => ({
           enabled: true,
-          defaultAction: 'motrix',
-          unknownSizeAction: 'motrix',
+          defaultAction: 'nio',
+          unknownSizeAction: 'nio',
           rules: [],
         }),
         captureGuard: async () => ({ assertCurrent: vi.fn() }),
@@ -252,8 +252,8 @@ describe('handleFirefoxDownloadSafely', () => {
       {
         getConfig: async () => ({
           enabled: true,
-          defaultAction: 'motrix',
-          unknownSizeAction: 'motrix',
+          defaultAction: 'nio',
+          unknownSizeAction: 'nio',
           rules: [],
         }),
         captureGuard: async () => ({ assertCurrent: vi.fn() }),
@@ -329,7 +329,7 @@ it.each(['accepted', 'unknown', 'browser', 'skipped', 'failed'] as const)(
         getConfig: async () => ({
           enabled: true,
           openTaskPanelAfterSubmit: true,
-          defaultAction: 'motrix',
+          defaultAction: 'nio',
           rules: [],
         }),
         captureGuard: async () => ({

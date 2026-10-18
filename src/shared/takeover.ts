@@ -1,4 +1,4 @@
-export type TakeoverAction = 'motrix' | 'chrome' | 'ask'
+export type TakeoverAction = 'nio' | 'chrome' | 'ask'
 export type DownloadMode = 'confirm' | 'direct'
 
 export interface TakeoverRule {
@@ -14,9 +14,9 @@ export interface TakeoverConfig {
   enabled: boolean
   /** Bumped acknowledgement of the cookie-consent dialog; 0 = never consented. */
   consentAckVersion: number
-  defaultAction: 'motrix' | 'chrome'
+  defaultAction: 'nio' | 'chrome'
   /** Automatic downloads whose size remains unknown after probing. */
-  unknownSizeAction: 'motrix' | 'chrome'
+  unknownSizeAction: 'nio' | 'chrome'
   rules: TakeoverRule[]
 }
 
@@ -55,7 +55,7 @@ export const TAKEOVER_DEFAULT: TakeoverConfig = {
   openTaskPanelAfterSubmit: false,
   enabled: false,
   consentAckVersion: 0,
-  defaultAction: 'motrix',
+  defaultAction: 'nio',
   unknownSizeAction: 'chrome',
   rules: [],
 }

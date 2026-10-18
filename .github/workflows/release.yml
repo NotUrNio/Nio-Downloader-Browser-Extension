@@ -31,7 +31,7 @@ jobs:
         env:
           RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
         run: |
-          test "$GITHUB_REPOSITORY" = NotUrNio/Nio-Downloader-Extension
+          test "$GITHUB_REPOSITORY" = NotUrNio/Nio-Downloader-Browser-Extension
           [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
           test "$GITHUB_REF" = "refs/tags/$RELEASE_TAG"
       - name: Check out the release tag

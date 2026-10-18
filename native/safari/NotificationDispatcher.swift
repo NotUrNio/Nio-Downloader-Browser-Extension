@@ -23,7 +23,6 @@ enum NotificationDispatcher {
         let store = try? receiptStore()
         // Enable delivery only after the installed, signed P0 path is verified.
         let deliverySetting = Bundle.main.object(forInfoDictionaryKey: "NioNotificationDelivery") as? String
-            ?? Bundle.main.object(forInfoDictionaryKey: "MotrixNotificationDelivery") as? String
         let deliveryEnabled = deliverySetting == "direct"
         if deliveryEnabled && store != nil { result["delivery"] = "direct" }
         guard request.action != .status else { return result }
@@ -72,7 +71,6 @@ enum NotificationDispatcher {
         content.body = request.body ?? NativeStrings.value("options.notifications.testBody")
         content.userInfo = [
             "nioEventId": request.eventID.uuidString.lowercased(),
-            "motrixEventId": request.eventID.uuidString.lowercased(),
         ]
         content.threadIdentifier = "nio.\(profile?.uuidString.lowercased() ?? "unscoped")"
         var accepted = false
@@ -98,7 +96,7 @@ enum NotificationDispatcher {
         let appURL = extensionURL.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         guard extensionURL.pathExtension == "appex", appURL.pathExtension == "app",
               let bid = Bundle(url: appURL)?.bundleIdentifier,
-              (bid == "app.niodownloader.safari" || bid == "app.motrix.safari") else { return false }
+              bid == "app.niodownloader.safari" else { return false }
         let configuration = NSWorkspace.OpenConfiguration()
         configuration.activates = true
         return await withCheckedContinuation { continuation in
@@ -109,8 +107,7 @@ enum NotificationDispatcher {
     }
 
     private static func receiptStore() throws -> NotificationReceiptStore {
-        guard let group = Bundle.main.object(forInfoDictionaryKey: "NioNotificationGroup") as? String
-            ?? Bundle.main.object(forInfoDictionaryKey: "MotrixNotificationGroup") as? String,
+        guard let group = Bundle.main.object(forInfoDictionaryKey: "NioNotificationGroup") as? String,
               let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: group)
         else { throw NotificationReceiptStore.StoreError.unavailable }
         let directory = container.appendingPathComponent("Library/Application Support/NioNotifications", isDirectory: true)

@@ -4,7 +4,7 @@
  *
  * The extension generates an ephemeral Ed25519 "binding" keypair per
  * bootstrap attempt, sends `bindingPub` to the Native Messaging host over NM
- * stdio, and later proves possession of `bindingPriv` to the Motrix bridge
+ * stdio, and later proves possession of `bindingPriv` to the Nio Downloader bridge
  * server by signing the domain-tagged SPAKE2 transcript `TT` as
  * `confirmA.ticketProof`. This binds a minted ticket to the one handshake
  * that holds the corresponding private key, so the ticket cannot be replayed
@@ -19,9 +19,9 @@
  *
  * **Deviation from a minimal `{action, protocolVersion, bindingPub}` request
  * shape:** Line A's Native Messaging host — the peer this module must
- * interoperate with — only wakes a sleeping Motrix when the bootstrap
+ * interoperate with — only wakes a sleeping Nio Downloader when the bootstrap
  * request's `allowLaunch` field is *literally* `true`; a request that omits it
- * never triggers the gesture-free wake path (§9.1 step 3: "wakes Motrix if
+ * never triggers the gesture-free wake path (§9.1 step 3: "wakes Nio Downloader if
  * needed"). So the field stays on the wire, always present and explicit.
  *
  * It is a **parameter**, not a constant. An earlier shape typed it as the
@@ -53,7 +53,7 @@ export interface BootstrapRequest {
   /**
    * MUST be the literal `true` (see the module-level deviation note above) —
    * Line A's host treats anything else, including a missing field, as "do
-   * not wake Motrix."
+   * not wake Nio Downloader."
    */
   allowLaunch: boolean
 }

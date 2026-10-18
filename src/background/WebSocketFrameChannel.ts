@@ -24,7 +24,7 @@
  * ## What happens after a flow succeeds
  *
  * Neither flow calls `close()` on success — the caller owns the socket from
- * there on, since MDXP `motrix/initialize` runs inside the envelope the flow
+ * there on, since MDXP `nio/initialize` runs inside the envelope the flow
  * just derived. `release()` (not part of `FrameChannel`, so callers must hold
  * the concrete class to reach it) detaches this channel's own listeners and
  * hands back the live `WebSocket` **and** any frames still sitting in

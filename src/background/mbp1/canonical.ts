@@ -45,7 +45,7 @@ export function len64LE(n: number): Uint8Array {
  * that side encodes with `Buffer.from(s, 'ascii')`, which truncates each
  * character to its low byte, while this side uses UTF-8. For any non-ASCII
  * input the two would derive **different** `w` values, and the only symptom
- * would be key confirmation failing against a real Motrix — so both sides
+ * would be key confirmation failing against a real Nio Downloader — so both sides
  * refuse the input instead of encoding it differently.
  */
 export function assertAscii(s: string, field: string): Uint8Array {

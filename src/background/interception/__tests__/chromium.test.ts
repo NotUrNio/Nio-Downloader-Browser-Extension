@@ -43,7 +43,7 @@ function enabledConfig(
   return {
     enabled: true,
     consentAckVersion: 1,
-    defaultAction: 'motrix',
+    defaultAction: 'nio',
     unknownSizeAction: 'chrome',
     rules: [],
     ...overrides,
@@ -262,7 +262,7 @@ describe('registerChromiumInterception', () => {
     // minSizeMB matches KNOWN sizes BELOW the threshold; probe returns 5 MiB.
     register(
       enabledConfig({
-        defaultAction: 'motrix',
+        defaultAction: 'nio',
         rules: [{ id: 'r1', match: { minSizeMB: 100 }, action: 'chrome' }],
       })
     )
@@ -325,7 +325,7 @@ describe('registerChromiumInterception', () => {
   it.each(['', '10'])(
     'uses the chosen handler for unknown TXT sizes with threshold %s',
     async (thresholdMB) => {
-      for (const unknownSizeAction of ['chrome', 'motrix'] as const) {
+      for (const unknownSizeAction of ['chrome', 'nio'] as const) {
         vi.clearAllMocks()
         vi.mocked(probeTarget).mockResolvedValue({
           sizeBytes: null,
@@ -346,7 +346,7 @@ describe('registerChromiumInterception', () => {
         )
         await vi.waitFor(() => expect(suggest).toHaveBeenCalledOnce())
         expect(mockedRunHandoff).toHaveBeenCalledTimes(
-          unknownSizeAction === 'motrix' ? 1 : 0
+          unknownSizeAction === 'nio' ? 1 : 0
         )
         expect(probeTarget).toHaveBeenCalledOnce()
       }
@@ -355,14 +355,14 @@ describe('registerChromiumInterception', () => {
 
   it('declines a form-POST download whose GET replay serves HTML', async () => {
     // uupdump.net: the browser saved the POST response (a zip); a GET to the
-    // same URL returns the configuration page. Motrix can only replay GET, so
+    // same URL returns the configuration page. Nio Downloader can only replay GET, so
     // the download must stay native rather than land as a renamed HTML file.
     const { probeTarget } = await import('@/background/capture/probeSize')
     vi.mocked(probeTarget).mockResolvedValueOnce({
       sizeBytes: null,
       contentType: 'text/html; charset=UTF-8',
     })
-    register(enabledConfig({ unknownSizeAction: 'motrix' }))
+    register(enabledConfig({ unknownSizeAction: 'nio' }))
     const suggest = vi.fn()
     listener?.(
       item({
@@ -384,7 +384,7 @@ describe('registerChromiumInterception', () => {
       sizeBytes: null,
       contentType: 'text/html; charset=UTF-8',
     })
-    register(enabledConfig({ unknownSizeAction: 'motrix' }))
+    register(enabledConfig({ unknownSizeAction: 'nio' }))
     const suggest = vi.fn()
     listener?.(
       item({

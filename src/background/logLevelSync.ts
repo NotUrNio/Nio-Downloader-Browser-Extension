@@ -18,7 +18,7 @@ export function makeLogLevelChangeHandler(): (
 ) => void {
   return (changes, area) => {
     if (area !== 'local') return
-    const change = changes[LOG_LEVEL_KEY] ?? changes['motrix.logLevel']
+    const change = changes[LOG_LEVEL_KEY]
     if (!change) return
     log.setLevel(parseLogLevel(change.newValue) ?? DEFAULT_LOG_LEVEL)
   }

@@ -64,7 +64,7 @@ function makeFakeConn(): MdxpConnection {
     sendRequest: vi.fn(async (method: string, params: { sentAt?: number }) => {
       if (method === Methods.SystemPing)
         return { sentAt: params.sentAt, recvAt: Date.now() }
-      if (method === 'nio/initialize' || method === 'motrix/initialize') {
+      if (method === 'nio/initialize' || method === Methods.NioInitialize) {
         const result: Record<string, unknown> = {
           protocolVersion: '1.0',
           server: {
@@ -413,7 +413,7 @@ describe('ConnectionManager — happy path', () => {
     expect(first).toBe(second)
     pending.resolve({
       protocolVersion: '1.0',
-      server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+      server: { name: 'niodownloader', version: '2.0', runtime: 'electron' },
       capabilities: {
         ffmpegAvailable: true,
         selectionKinds: ['direct', 'hls', 'dash', 'mux'],
@@ -435,7 +435,7 @@ describe('ConnectionManager — happy path', () => {
     // A later scan also detects removed/invalidated FFmpeg support.
     vi.mocked(conn.sendRequest).mockResolvedValueOnce({
       protocolVersion: '1.0',
-      server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+      server: { name: 'niodownloader', version: '2.0', runtime: 'electron' },
       capabilities: {
         ffmpegAvailable: false,
         selectionKinds: ['direct'],
@@ -450,7 +450,7 @@ describe('ConnectionManager — happy path', () => {
     })
   })
 
-  it('does not connect or launch Motrix to refresh an offline session', async () => {
+  it('does not connect or launch Nio Downloader to refresh an offline session', async () => {
     const mgr = makeManager()
     await expect(mgr.refreshServerCapabilities()).resolves.toBeNull()
     expect(mgr.getState()).toBe('disconnected')
@@ -489,7 +489,7 @@ describe('ConnectionManager — happy path', () => {
     {},
     {
       protocolVersion: '1.0',
-      server: { name: 'motrix', version: '2.0', runtime: 'server' },
+      server: { name: 'niodownloader', version: '2.0', runtime: 'server' },
       capabilities: {
         ffmpegAvailable: true,
         selectionKinds: ['direct', 'mux'],
@@ -518,7 +518,7 @@ describe('ConnectionManager — happy path', () => {
     await mgr.connect({ allowLaunch: true, userInitiated: true })
 
     expect(mgr.getState()).toBe('disconnected')
-    expect(mgr.getLastError()).toMatch(/(?:nio|motrix)\/initialize timed out/i)
+    expect(mgr.getLastError()).toMatch(/nio\/initialize timed out/i)
   })
 
   // Retired bootstrap-route cases are intentionally absent. Local pairing
@@ -539,7 +539,7 @@ describe('ConnectionManager — happy path', () => {
   it('ignores a token-era initialize field without reading or writing retired storage', async () => {
     const conn = makeFakeConnWithInitializeResult({
       protocolVersion: '1.0',
-      server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+      server: { name: 'niodownloader', version: '2.0', runtime: 'electron' },
       capabilities: {
         ffmpegAvailable: true,
         selectionKinds: ['direct'],
@@ -555,14 +555,10 @@ describe('ConnectionManager — happy path', () => {
 
     expect(mgr.getState()).toBe('connected')
     for (const [items] of vi.mocked(browser.storage.local.set).mock.calls) {
-      expect(items).not.toHaveProperty('motrix.pairTokens')
-      expect(items).not.toHaveProperty('motrix.pairToken')
+      expect(items).not.toHaveProperty('nio.retired.pairTokens')
     }
     expect(vi.mocked(browser.storage.local.get).mock.calls).not.toContainEqual([
-      'motrix.pairTokens',
-    ])
-    expect(vi.mocked(browser.storage.local.get).mock.calls).not.toContainEqual([
-      'motrix.pairToken',
+      'nio.retired.pairTokens',
     ])
   })
 })
@@ -573,7 +569,7 @@ describe('ConnectionManager — failure paths', () => {
       label: 'a newer MDXP version',
       result: {
         protocolVersion: '2.0',
-        server: { name: 'motrix', version: '3.0', runtime: 'electron' },
+        server: { name: 'niodownloader', version: '3.0', runtime: 'electron' },
         capabilities: {
           ffmpegAvailable: true,
           selectionKinds: ['direct'],
@@ -588,7 +584,7 @@ describe('ConnectionManager — failure paths', () => {
       label: 'a server runtime',
       result: {
         protocolVersion: '1.0',
-        server: { name: 'motrix', version: '2.0', runtime: 'server' },
+        server: { name: 'niodownloader', version: '2.0', runtime: 'server' },
         capabilities: {
           ffmpegAvailable: true,
           selectionKinds: ['direct'],
@@ -821,7 +817,7 @@ describe('ConnectionManager — pair denial', () => {
     const conn = {
       listen: vi.fn(),
       sendRequest: vi.fn(async (method: string) => {
-        if (method === 'nio/initialize' || method === 'motrix/initialize') {
+        if (method === 'nio/initialize' || method === Methods.NioInitialize) {
           const err = new Error('User denied pairing') as Error & {
             code: number
             data?: { appCode: string }
@@ -895,10 +891,14 @@ describe('ConnectionManager — pair revoked notification', () => {
     const conn = {
       listen: vi.fn(),
       sendRequest: vi.fn(async (method: string) => {
-        if (method === 'nio/initialize' || method === 'motrix/initialize') {
+        if (method === 'nio/initialize' || method === Methods.NioInitialize) {
           return {
             protocolVersion: '1.0',
-            server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+            server: {
+              name: 'niodownloader',
+              version: '2.0',
+              runtime: 'electron',
+            },
             capabilities: {
               ffmpegAvailable: true,
               selectionKinds: ['direct'],
@@ -943,14 +943,14 @@ describe('ConnectionManager — pair revoked notification', () => {
     await mgr.connect({ allowLaunch: true, userInitiated: true })
     expect(mgr.getState()).toBe('connected')
 
-    // Motrix revokes → notification arrives
+    // Nio Downloader revokes → notification arrives
     fireRevoked('user-revoked')
     await new Promise((r) => setTimeout(r, 10))
 
     expect(mgr.getState()).toBe('denied')
     expect(mgr.getLastError()).toMatch(/revoked/i)
 
-    // The ws-close Motrix sends ~50ms later must NOT reconnect
+    // The ws-close Nio Downloader sends ~50ms later must NOT reconnect
     sockets[0]?.fireClose()
     await new Promise((r) => setTimeout(r, 30))
     expect(states).not.toContain('reconnecting')
@@ -1059,7 +1059,7 @@ describe('ConnectionManager — pair revoked notification', () => {
 
     // `denied` is observable before asynchronous storage cleanup finishes.
     // The popup may react immediately, but must not reconnect with the
-    // credential that Motrix has just revoked.
+    // credential that Nio Downloader has just revoked.
     expect(mgr.getState()).toBe('denied')
     expect(retry).not.toBeNull()
     expect(recoverOrder).not.toHaveBeenCalled()
@@ -1268,10 +1268,14 @@ describe('ConnectionManager — request() proxy', () => {
     const fakeConn: MdxpConnection = {
       listen: vi.fn(),
       sendRequest: vi.fn(async (method: string) => {
-        if (method === 'nio/initialize' || method === 'motrix/initialize') {
+        if (method === 'nio/initialize' || method === Methods.NioInitialize) {
           return {
             protocolVersion: '1.0',
-            server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+            server: {
+              name: 'niodownloader',
+              version: '2.0',
+              runtime: 'electron',
+            },
             capabilities: {
               ffmpegAvailable: true,
               selectionKinds: ['direct'],
@@ -1321,11 +1325,11 @@ describe('ConnectionManager — request() proxy', () => {
 describe('ConnectionManager — remote endpoint', () => {
   it('does not read retired token storage for obsolete endpoint data', async () => {
     await browser.storage.local.set({
-      'motrix.endpointConfig': {
+      'nio.endpointConfig': {
         mode: 'remote',
         remoteUrl: 'wss://legacy-server.example',
       },
-      'motrix.pairToken': 'tok-legacy-app',
+      'nio.retired.pairTokens': 'tok-legacy-app',
     })
     const endpointConfigStore = new EndpointConfigStore()
     const client = makeFakeClient({ conn: makeFakeConn() })
@@ -1344,8 +1348,7 @@ describe('ConnectionManager — remote endpoint', () => {
     expect(mgr.getState()).toBe('disconnected')
     expect(client.__urls).toEqual([])
     const storageReads = vi.mocked(browser.storage.local.get).mock.calls
-    expect(storageReads).not.toContainEqual(['motrix.pairToken'])
-    expect(storageReads).not.toContainEqual(['motrix.pairTokens'])
+    expect(storageReads).not.toContainEqual(['nio.retired.pairTokens'])
   })
 
   it('keeps every configured remote backend behind the compatibility boundary', async () => {
@@ -1763,7 +1766,11 @@ function makeFakeConnWithNotifications(): MdxpConnection & {
       if (method === 'nio/initialize' || method === Methods.NioInitialize) {
         const result: Record<string, unknown> = {
           protocolVersion: '1.0',
-          server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+          server: {
+            name: 'niodownloader',
+            version: '2.0',
+            runtime: 'electron',
+          },
           capabilities: {
             ffmpegAvailable: true,
             selectionKinds: ['direct'],
@@ -1951,7 +1958,11 @@ describe('ConnectionManager — submitDownload + cancelDownload', () => {
         if (method === 'nio/initialize' || method === Methods.NioInitialize) {
           return {
             protocolVersion: '1.0',
-            server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+            server: {
+              name: 'niodownloader',
+              version: '2.0',
+              runtime: 'electron',
+            },
             capabilities: {
               ffmpegAvailable: true,
               downloadDirectories,
@@ -2094,7 +2105,7 @@ describe('ConnectionManager — submitDownload + cancelDownload', () => {
       meta: { suggestedFilename: 'a.mp4', qualityLabel: '1080p' },
     }
     const res = await manager.submitDownload(params)
-    // Every submit carries an idempotency key so Motrix can collapse
+    // Every submit carries an idempotency key so Nio Downloader can collapse
     // retransmits of the same logical submission.
     expect(fakeConn.sendRequest).toHaveBeenCalledWith('download/submit', {
       ...params,
@@ -2193,7 +2204,11 @@ describe('ConnectionManager — submitDownload + cancelDownload', () => {
       if (method === 'nio/initialize' || method === Methods.NioInitialize) {
         return {
           protocolVersion: '1.0',
-          server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+          server: {
+            name: 'niodownloader',
+            version: '2.0',
+            runtime: 'electron',
+          },
           capabilities: {
             ffmpegAvailable: true,
             selectionKinds: ['direct'],

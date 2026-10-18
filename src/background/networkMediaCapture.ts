@@ -651,7 +651,7 @@ async function resolveFrameOwner(
 
 /**
  * Persist one response observed by webRequest. This path deliberately has no
- * Backend/ConnectionManager dependency: discovery remains useful while Motrix
+ * Backend/ConnectionManager dependency: discovery remains useful while Nio Downloader
  * is offline and submission is gated later by the Popup.
  */
 export async function captureNetworkMediaResponse(

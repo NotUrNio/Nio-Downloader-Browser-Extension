@@ -4,7 +4,7 @@ import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { verifyRelease } from './store-release.mjs'
 
-const repository = 'NotUrNio/Nio-Downloader-Extension'
+const repository = 'NotUrNio/Nio-Downloader-Browser-Extension'
 const workflow = `${repository}/.github/workflows/release.yml`
 
 // Arguments never pass through a shell. A failed gh verification is fatal;

@@ -19,17 +19,13 @@ import { fileURLToPath } from 'node:url'
 if (process.platform !== 'darwin')
   throw new Error('This link check requires macOS')
 const root = fileURLToPath(new URL('../', import.meta.url))
-const source =
-  process.env.NIODOWNLOADER_NATIVE_HOST_SOURCE ??
-  process.env.MOTRIX_NATIVE_HOST_SOURCE
+const source = process.env.NIODOWNLOADER_NATIVE_HOST_SOURCE
 if (!source)
   throw new Error(
     'Set NIODOWNLOADER_NATIVE_HOST_SOURCE to the native-host package'
   )
 const output = join(root, '.cache/safari-native/bootstrap')
-const archive = existsSync(join(output, 'rust/release/libnio_native_host.a'))
-  ? join(output, 'rust/release/libnio_native_host.a')
-  : join(output, 'rust/release/libmotrix_native_host.a')
+const archive = join(output, 'rust/release/libnio_native_host.a')
 if (!existsSync(archive))
   throw new Error('Build the signed bootstrap service before checking its link')
 mkdirSync(output, { recursive: true })
@@ -40,9 +36,7 @@ const environment = {
 }
 const executable = join(output, 'BootstrapLinkVerification')
 const ipc = join(root, 'native/safari/Sources/SafariNativeIPC')
-const header = existsSync(resolve(source, 'include/nio_safari_bootstrap.h'))
-  ? resolve(source, 'include/nio_safari_bootstrap.h')
-  : resolve(source, 'include/motrix_safari_bootstrap.h')
+const header = resolve(source, 'include/nio_safari_bootstrap.h')
 const compiled = spawnSync(
   '/usr/bin/xcrun',
   [
@@ -106,7 +100,6 @@ async function invoke(message = request) {
     env: {
       ...environment,
       NIODOWNLOADER_BRIDGE_DATA_DIR: directory,
-      MOTRIX_BRIDGE_DATA_DIR: directory,
     },
     stdio: ['pipe', 'pipe', 'pipe'],
   })
@@ -149,10 +142,7 @@ try {
   assert.equal(signed.value.nonce, nonce)
   const ticket = signed.value.nmTicket
   assert.equal(ticket.browser, 'safari')
-  assert(
-    ticket.callerId === 'app.niodownloader.safari.extension' ||
-      ticket.callerId === 'app.motrix.safari.extension'
-  )
+  assert.equal(ticket.callerId, 'app.niodownloader.safari.extension')
   assert.equal(ticket.bindingPub, request.bindingPub)
   assert(
     ticket.exp >= before + 60 &&

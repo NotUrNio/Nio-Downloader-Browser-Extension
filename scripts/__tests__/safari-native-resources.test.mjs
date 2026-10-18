@@ -6,7 +6,7 @@ import test from 'node:test'
 import { verifyNativeResources } from '../safari-native-resources.mjs'
 
 test('native packaging rejects newly added resources omitted by Xcode and stale JS', () => {
-  const root = mkdtempSync(join(tmpdir(), 'motrix-native-resources-'))
+  const root = mkdtempSync(join(tmpdir(), 'nio-native-resources-'))
   try {
     const source = join(root, 'source')
     const target = join(root, 'target')

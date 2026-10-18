@@ -128,7 +128,7 @@ function installConnectedBus(): ReturnType<typeof vi.fn> {
       return {
         enabled: true,
         consentAckVersion: 1,
-        defaultAction: 'motrix',
+        defaultAction: 'nio',
         rules: [],
       }
     }
@@ -256,7 +256,7 @@ describe('Popup App', () => {
           ...SNAPSHOT,
           state: 'handshaking',
           pairingCode: {
-            instanceId: 'motrix-desktop-1',
+            instanceId: 'nio-desktop-1',
             run: 1,
             maxRuns: 3,
             attemptsRemaining: null,
@@ -307,7 +307,7 @@ describe('Popup App', () => {
           ...SNAPSHOT,
           state: 'awaiting-code',
           pairingCode: {
-            instanceId: 'motrix-desktop-1',
+            instanceId: 'nio-desktop-1',
             run: 1,
             maxRuns: 3,
             attemptsRemaining: null,
@@ -325,7 +325,7 @@ describe('Popup App', () => {
         return {
           enabled: true,
           consentAckVersion: 1,
-          defaultAction: 'motrix',
+          defaultAction: 'nio',
           rules: [],
         }
       }
@@ -415,7 +415,7 @@ describe('Popup App', () => {
     ).toBeTruthy()
     expect(screen.getByRole('menuitemradio', { name: /Home NAS/ })).toBeTruthy()
     expect(screen.getAllByRole('menuitemradio')).toHaveLength(3)
-    expect(screen.queryByText(/Motrix · electron/i)).toBeNull()
+    expect(screen.queryByText(/Nio Downloader · electron/i)).toBeNull()
     expect(
       screen.getByRole('menuitem', { name: /Nio Downloader Server/ })
     ).toBeTruthy()
@@ -588,7 +588,7 @@ describe('Popup App', () => {
         return {
           enabled: true,
           consentAckVersion: 1,
-          defaultAction: 'motrix',
+          defaultAction: 'nio',
           rules: [],
         }
       }
@@ -687,7 +687,7 @@ describe('Popup App', () => {
         return {
           enabled: true,
           consentAckVersion: 1,
-          defaultAction: 'motrix',
+          defaultAction: 'nio',
           rules: [],
         }
       }

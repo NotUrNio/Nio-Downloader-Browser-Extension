@@ -21,7 +21,7 @@ function parseLen(value: string | null): number | null {
 }
 
 /**
- * Rehearse the request Motrix would make: one HEAD, falling back to a 1-byte
+ * Rehearse the request Nio Downloader would make: one HEAD, falling back to a 1-byte
  * ranged GET when HEAD is unsupported or carries no length. Reports both the
  * size (for the config's minSizeMB rules) and the Content-Type (for the
  * replay-fidelity check in `replayFidelity.ts`).

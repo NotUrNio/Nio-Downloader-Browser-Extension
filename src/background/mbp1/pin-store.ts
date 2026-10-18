@@ -49,7 +49,6 @@ interface StoredPins {
 type StoredPinsRead = { kind: 'known'; set: StoredPins } | { kind: 'future' }
 
 const STORAGE_KEY = 'nio.mbp1.pins'
-const LEGACY_STORAGE_KEY = 'motrix.mbp1.pins'
 
 /**
  * A bound on the persisted `instanceId`, whose only job is to stop a corrupted
@@ -255,13 +254,7 @@ export class PinStore {
       string,
       unknown
     >
-    let raw = obj[STORAGE_KEY]
-    if (raw === undefined) {
-      const legacy = (await browser.storage.local.get(
-        LEGACY_STORAGE_KEY
-      )) as Record<string, unknown>
-      raw = legacy[LEGACY_STORAGE_KEY]
-    }
+    const raw = obj[STORAGE_KEY]
     const stored = readStoredPins(raw)
     if (stored.kind === 'future') {
       if (forMutation) throw new UnsupportedPinStoreVersionError()

@@ -125,7 +125,7 @@ it.each(['direct', 'confirm'] as const)(
   'honors both unknown-size choices within a finite metadata budget in %s mode',
   async (downloadMode) => {
     config.downloadMode = downloadMode
-    for (const unknownSizeAction of ['chrome', 'motrix'] as const) {
+    for (const unknownSizeAction of ['chrome', 'nio'] as const) {
       vi.clearAllMocks()
       current!.state = 'in_progress'
       config.unknownSizeAction = unknownSizeAction
@@ -134,7 +134,7 @@ it.each(['direct', 'confirm'] as const)(
       expect(confirm).not.toHaveBeenCalled()
       expect(cancel).not.toHaveBeenCalled()
       await settle(operation, 1)
-      const accepted = unknownSizeAction === 'motrix' ? 1 : 0
+      const accepted = unknownSizeAction === 'nio' ? 1 : 0
       expect(confirm).toHaveBeenCalledTimes(
         downloadMode === 'confirm' ? accepted : 0
       )
@@ -148,7 +148,7 @@ it.each(['direct', 'confirm'] as const)(
 it.each(['complete', 'interrupted', 'paused', 'erased'])(
   'leaves a native download alone when it becomes %s while waiting',
   async (state) => {
-    config.unknownSizeAction = 'motrix'
+    config.unknownSizeAction = 'nio'
     const operation = handleFirefoxDownloadSafely({ ...current! }, deps)
     await vi.advanceTimersByTimeAsync(200)
     if (state === 'erased') current = undefined

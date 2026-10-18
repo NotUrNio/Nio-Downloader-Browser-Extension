@@ -77,8 +77,8 @@ const CLIENT_INFO: ConnectionManagerOptions['clientInfo'] = {
 }
 
 /**
- * Stand up a minimal mock Motrix bridge: accepts a WS connection on any
- * route and replies to motrix/initialize with a fake server descriptor. We
+ * Stand up a minimal mock Nio Downloader bridge: accepts a WS connection on any
+ * route and replies to nio/initialize with a fake server descriptor. We
  * bypass createMdxpConnection on the server side and just
  * parse/serialize JSON-RPC frames directly — keeps the test self-contained.
  */
@@ -99,14 +99,18 @@ async function startMockBridge(): Promise<{
         method?: string
         params?: unknown
       }
-      if (msg.method === 'motrix/initialize' && msg.id !== undefined) {
+      if (msg.method === 'nio/initialize' && msg.id !== undefined) {
         initParams = msg.params
         const response = {
           jsonrpc: '2.0' as const,
           id: msg.id,
           result: {
             protocolVersion: '1.0',
-            server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+            server: {
+              name: 'niodownloader',
+              version: '2.0',
+              runtime: 'electron',
+            },
             capabilities: {
               ffmpegAvailable: true,
               selectionKinds: ['direct'],
@@ -119,7 +123,7 @@ async function startMockBridge(): Promise<{
         ws.send(JSON.stringify(response))
         return
       }
-      if (msg.method === 'motrix/initialized') {
+      if (msg.method === 'nio/initialized') {
         initialized = true
         return
       }
@@ -204,7 +208,10 @@ describe('transport e2e — ConnectionManager ↔ in-process ws server', () => {
 
   it('ignores retired storage instead of placing it on a route', async () => {
     await browser.storage.local.set({
-      'motrix.pairTokens': { version: 1, tokens: { e2e: 'secret-sentinel' } },
+      'nio.retired.pairTokens': {
+        version: 1,
+        tokens: { e2e: 'secret-sentinel' },
+      },
     })
     const endpointConfigStore = new EndpointConfigStore()
     await endpointConfigStore.setForTest({
@@ -245,7 +252,7 @@ describe('transport e2e — ConnectionManager ↔ in-process ws server', () => {
 // project wrote is a system-level mirror test. If this mock and the real
 // `ConnectionManager`/`PairingFlow`/`ReconnectFlow` share a misunderstanding
 // of the protocol, they agree with each other here and the test goes green
-// while a real Motrix would reject every frame. This suite reduces that risk
+// while a real Nio Downloader would reject every frame. This suite reduces that risk
 // two ways, and each has a limit:
 //
 // 1. Inbound client frames are validated with the real, shipped
@@ -283,7 +290,7 @@ describe('transport e2e — ConnectionManager ↔ in-process ws server', () => {
 //    shared misreading of the *spec itself* (as opposed to the *code*)
 //    would not be caught here.
 //
-// What this suite does NOT prove: interop with the real Motrix desktop
+// What this suite does NOT prove: interop with the real Nio Downloader desktop
 // build. That is Line A's own test suite and the shared §13 normative
 // vectors' job.
 
@@ -542,7 +549,7 @@ async function sealedReceive(
 
 /**
  * A `ws` server (+ sibling `http.Server`) that speaks the **server** side of
- * MBP1 for exactly one simulated Motrix instance: `GET /discovery` and
+ * MBP1 for exactly one simulated Nio Downloader instance: `GET /discovery` and
  * `POST /nonce` over plain HTTP, `/pair` and `/v1` as real WebSocket
  * handshakes running the actual §6/§8/§10 crypto against the real
  * `ConnectionManager`/`PairingFlow`/`ReconnectFlow` on the other end.
@@ -555,7 +562,7 @@ async function startMbp1MockBridge(opts: {
   instanceId?: string
   appVersion?: string
 }): Promise<Mbp1MockBridge> {
-  const instanceId = opts.instanceId ?? 'mock-motrix-1'
+  const instanceId = opts.instanceId ?? 'mock-nio-1'
   const appVersion = opts.appVersion ?? '9.9.9'
   const { code } = opts
 
@@ -597,12 +604,8 @@ async function startMbp1MockBridge(opts: {
             id?: unknown
             method?: string
           }
-          if (
-            (msg.method === 'nio/initialize' ||
-              msg.method === 'motrix/initialize') &&
-            msg.id !== undefined
-          ) {
-            // `motrix/initialize` only arrives here once the client's own
+          if (msg.method === 'nio/initialize' && msg.id !== undefined) {
+            // `nio/initialize` only arrives here once the client's own
             // PairingFlow/ReconnectFlow has already verified mutual
             // authentication and handed the envelope to MDXP — a client that
             // rejected `confirmB`/`reconnectAccept` never gets this far on
@@ -615,7 +618,11 @@ async function startMbp1MockBridge(opts: {
               id: msg.id,
               result: {
                 protocolVersion: '1.0',
-                server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+                server: {
+                  name: 'niodownloader',
+                  version: '2.0',
+                  runtime: 'electron',
+                },
                 capabilities: {
                   ffmpegAvailable: true,
                   selectionKinds: ['direct'],
@@ -862,13 +869,13 @@ async function startMbp1MockBridge(opts: {
   }
 }
 
-const MOCK_PAIRING_CODE = 'MTX7K2Q9'
+const MOCK_PAIRING_CODE = 'N2X7K2Q9'
 
 describe('MBP1 e2e — first pair then reconnect', () => {
   it('pairs with a code and reconnects with the issued credential', async () => {
     const bridge = await startMbp1MockBridge({
       code: MOCK_PAIRING_CODE,
-      instanceId: 'mock-motrix-1',
+      instanceId: 'mock-nio-1',
       appVersion: '9.9.9',
     })
     try {

@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Require the main workflow branch
         run: |
-          test "$GITHUB_REPOSITORY" = NotUrNio/Nio-Downloader-Extension
+          test "$GITHUB_REPOSITORY" = NotUrNio/Nio-Downloader-Browser-Extension
           test "$GITHUB_REF" = refs/heads/main
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:

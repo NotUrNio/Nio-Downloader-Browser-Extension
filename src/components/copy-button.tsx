@@ -19,7 +19,7 @@ type CopyButtonProps = Omit<
   copiedLabel?: string
 }
 
-/** Adapted from Motrix's desktop-kit CopyButton for extension UI primitives. */
+/** CopyButton for extension UI primitives. */
 export function CopyButton({
   content,
   iconPosition = 'start',

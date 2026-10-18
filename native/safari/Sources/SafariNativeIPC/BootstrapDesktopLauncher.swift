@@ -10,7 +10,7 @@ enum BootstrapDesktopLauncher {
         let library = services.deletingLastPathComponent()
         let contents = library.deletingLastPathComponent()
         let app = contents.deletingLastPathComponent()
-        guard (service.lastPathComponent == "NioSafariBootstrap" || service.lastPathComponent == "MotrixSafariBootstrap"),
+        guard service.lastPathComponent == "NioSafariBootstrap",
               services.lastPathComponent == "LaunchServices",
               library.lastPathComponent == "Library",
               contents.lastPathComponent == "Contents",
@@ -34,7 +34,7 @@ enum BootstrapDesktopLauncher {
         else { throw BootstrapIPCError.untrustedProcess }
         let app = try containingDesktop(executable: executable)
         let requirement = try BootstrapIPCConfiguration.compileRequirement(
-            "anchor apple generic and certificate leaf[subject.OU] = \"\(configuration.teamIdentifier)\" and (identifier \"app.niodownloader.native\" or identifier \"app.motrix.native\")"
+            "anchor apple generic and certificate leaf[subject.OU] = \"\(configuration.teamIdentifier)\" and identifier \"app.niodownloader.native\""
         )
         var code: SecStaticCode?
         guard SecStaticCodeCreateWithPath(app as CFURL, [], &code) == errSecSuccess,

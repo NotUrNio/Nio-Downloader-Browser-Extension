@@ -15,10 +15,10 @@ import test from 'node:test'
 import { installSafariApp } from '../safari-install-transaction.mjs'
 
 function fixture(t, installed = true) {
-  const root = mkdtempSync(join(tmpdir(), 'motrix-safari-install-'))
+  const root = mkdtempSync(join(tmpdir(), 'nio-safari-install-'))
   t.after(() => rmSync(root, { recursive: true, force: true }))
-  const source = join(root, 'build/Motrix.app')
-  const destination = join(root, 'Applications/Motrix.app')
+  const source = join(root, 'build/Nio Downloader Plugin.app')
+  const destination = join(root, 'Applications/Nio Downloader Plugin.app')
   const contents = (path) => readFileSync(join(path, 'bundle.json'), 'utf8')
   const put = (path, build, fingerprint = String(build)) => {
     mkdirSync(path, { recursive: true })
@@ -80,7 +80,7 @@ test('replacement keeps the installed path registered and retains an exact backu
     ['register', f.destination],
   ])
   assert.equal(
-    existsSync(join(f.root, 'Applications/.motrix-safari-install.lock')),
+    existsSync(join(f.root, 'Applications/.nio-safari-install.lock')),
     false
   )
 })
@@ -102,7 +102,9 @@ test('a failed registration restores the old bundle at its original path', (t) =
   )
   assert.equal(f.contents(f.destination), old)
   assert.deepEqual(f.calls.at(-1), ['register', f.destination])
-  assert.deepEqual(readdirSync(join(f.root, 'Applications')), ['Motrix.app'])
+  assert.deepEqual(readdirSync(join(f.root, 'Applications')), [
+    'Nio Downloader Plugin.app',
+  ])
 })
 
 test('invalid source or existing destination fails before any mutation', (t) => {
@@ -190,10 +192,8 @@ test('rollback errors are surfaced and recovery files are preserved', (t) => {
   )
   assert.equal(f.verify(f.destination).build, 1)
   assert.ok(
-    readdirSync(join(f.root, 'Applications')).some(
-      (name) =>
-        name.startsWith('.nio-safari-install-') ||
-        name.startsWith('.motrix-safari-install-')
+    readdirSync(join(f.root, 'Applications')).some((name) =>
+      name.startsWith('.nio-safari-install-')
     )
   )
 })

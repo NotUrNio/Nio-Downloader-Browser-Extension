@@ -893,7 +893,7 @@ if (typeof browser.alarms !== 'undefined') {
   // should hold unconditionally, not contingent on autostart's timing.
   syncKeepalive(manager.getState())
   browser.alarms.onAlarm.addListener((alarm) => {
-    if (alarm.name === KEEPALIVE || alarm.name === 'motrix.keepalive') {
+    if (alarm.name === KEEPALIVE) {
       log.info('keepalive tick; state:', manager.getState())
     }
   })

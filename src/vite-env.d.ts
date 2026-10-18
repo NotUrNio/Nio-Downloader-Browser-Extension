@@ -2,7 +2,6 @@
 
 declare const __BROWSER__: 'chromium' | 'firefox' | 'safari'
 
-declare const __MOTRIX_BUILD__: 'webstore' | 'full' | undefined
 declare const __NIO_BUILD__: 'webstore' | 'full' | undefined
 
 declare module 'virtual:nio-adapter-registry' {

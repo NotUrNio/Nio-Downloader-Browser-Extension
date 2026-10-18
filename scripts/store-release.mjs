@@ -5,8 +5,9 @@ import { pathToFileURL } from 'node:url'
 import { unzipSync } from 'fflate'
 
 export const STORE_IDS = ['chrome', 'edge', 'firefox']
-export const CHROME_EXTENSION_ID = 'lggbokfckofcgjndaboioakcmincinpo'
-export const FIREFOX_EXTENSION_ID = 'nio-downloader-extension@mozilla.org'
+export const CHROME_EXTENSION_ID =
+  process.env.CHROME_EXTENSION_ID || 'jbpflcefmjolnlliffidckmcpjobpbbl'
+export const FIREFOX_EXTENSION_ID = '{f3165928-2a14-4142-88b8-561b818602a6}'
 
 export function releaseFiles(tag) {
   if (

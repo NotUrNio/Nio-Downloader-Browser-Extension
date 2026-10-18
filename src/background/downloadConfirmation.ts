@@ -62,8 +62,7 @@ export function createDownloadConfirmation(
   if (!supportsAutoOpenPopup()) return service
   browser.runtime.onConnect.addListener((port) => {
     if (
-      (port.name !== CONFIRMATION_PORT &&
-        port.name !== 'motrix.download.confirmation') ||
+      port.name !== CONFIRMATION_PORT ||
       port.sender?.id !== browser.runtime.id ||
       port.sender.url !== browser.runtime.getURL('popup.html') ||
       port.sender.tab

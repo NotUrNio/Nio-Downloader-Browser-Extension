@@ -12,7 +12,6 @@ import { createRemoteBackendAuthority } from '@/background/mbp1/backend-authorit
 import { createOperationQueue } from '@/background/mbp1/operation-queue'
 
 const STORAGE_KEY = 'nio.endpointConfig'
-const LEGACY_STORAGE_KEY = 'motrix.endpointConfig'
 
 export const LOCAL_ENDPOINT_ID = 'local'
 export const ENDPOINT_CONFIG_VERSION = 3 as const
@@ -493,12 +492,9 @@ export class EndpointConfigStore {
 
   private async read(requireKnown: boolean): Promise<EndpointConfig> {
     return enqueueEndpointConfigOperation(async () => {
-      const obj = await browser.storage.local.get([
-        STORAGE_KEY,
-        LEGACY_STORAGE_KEY,
-      ])
+      const obj = await browser.storage.local.get(STORAGE_KEY)
       const records = obj as Record<string, unknown>
-      const value = records[STORAGE_KEY] ?? records[LEGACY_STORAGE_KEY]
+      const value = records[STORAGE_KEY]
       const stored = readStoredConfig(value)
       if (stored.kind === 'future') {
         if (requireKnown) throw new UnsupportedEndpointConfigVersionError()
@@ -511,9 +507,6 @@ export class EndpointConfigStore {
         return cloneDefault()
       }
       if (stored.kind === 'obsolete') {
-        if (records[LEGACY_STORAGE_KEY] !== undefined) {
-          await browser.storage.local.remove(LEGACY_STORAGE_KEY)
-        }
         await browser.storage.local.remove(STORAGE_KEY)
         return cloneDefault()
       }
@@ -544,14 +537,9 @@ export class EndpointConfigStore {
 
   private async persist(config: EndpointConfig): Promise<void> {
     return enqueueEndpointConfigOperation(async () => {
-      const obj = await browser.storage.local.get([
-        STORAGE_KEY,
-        LEGACY_STORAGE_KEY,
-      ])
+      const obj = await browser.storage.local.get(STORAGE_KEY)
       const records = obj as Record<string, unknown>
-      const current = readStoredConfig(
-        records[STORAGE_KEY] ?? records[LEGACY_STORAGE_KEY]
-      )
+      const current = readStoredConfig(records[STORAGE_KEY])
       if (current.kind === 'future') {
         throw new UnsupportedEndpointConfigVersionError()
       }
@@ -560,9 +548,6 @@ export class EndpointConfigStore {
       }
       const normalized = normalizeEndpointConfig(config)
       await browser.storage.local.set({ [STORAGE_KEY]: normalized })
-      if (records[LEGACY_STORAGE_KEY] !== undefined) {
-        await browser.storage.local.remove(LEGACY_STORAGE_KEY)
-      }
     })
   }
 }

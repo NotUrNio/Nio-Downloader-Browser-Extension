@@ -48,13 +48,9 @@ export function createBootstrapPackager({
   identity,
   developmentHost = false,
 }) {
-  const source =
-    process.env.NIODOWNLOADER_NATIVE_HOST_SOURCE ??
-    process.env.MOTRIX_NATIVE_HOST_SOURCE
+  const source = process.env.NIODOWNLOADER_NATIVE_HOST_SOURCE
   const headerPath = source
-    ? existsSync(join(source, 'include/nio_safari_bootstrap.h'))
-      ? join(source, 'include/nio_safari_bootstrap.h')
-      : join(source, 'include/motrix_safari_bootstrap.h')
+    ? join(source, 'include/nio_safari_bootstrap.h')
     : null
   if (!source || !headerPath || !existsSync(headerPath)) {
     throw new Error(
@@ -116,9 +112,7 @@ export function createBootstrapPackager({
     ['--sdk', 'macosx', '--show-sdk-path'],
     true
   )
-  const libPath = existsSync(join(rustOutput, 'release/libnio_native_host.a'))
-    ? join(rustOutput, 'release/libnio_native_host.a')
-    : join(rustOutput, 'release/libmotrix_native_host.a')
+  const libPath = join(rustOutput, 'release/libnio_native_host.a')
   run('/usr/bin/xcrun', [
     'swiftc',
     '-O',

@@ -32,22 +32,22 @@ describe('purgeRetiredPairTokenStorage', () => {
     'deletes both retired keys without interpreting a %s',
     async (_label, value) => {
       const storage = inMemoryStorage({
-        'motrix.pairTokens': value,
-        'motrix.pairToken': 'secret-sentinel',
-        'motrix.mbp1.credentials': { version: 99, opaque: true },
+        'nio.retired.pairTokens': value,
+        'nio.retired.pairToken': 'secret-sentinel',
+        'nio.mbp1.credentials': { version: 99, opaque: true },
         'another.future.key': { version: 500 },
       })
 
       await purgeRetiredPairTokenStorage(storage)
 
       expect(storage.values).toEqual({
-        'motrix.mbp1.credentials': { version: 99, opaque: true },
+        'nio.mbp1.credentials': { version: 99, opaque: true },
         'another.future.key': { version: 500 },
       })
       expect(storage.remove).toHaveBeenCalledOnce()
       expect(storage.remove).toHaveBeenCalledWith([
-        'motrix.pairTokens',
-        'motrix.pairToken',
+        'nio.retired.pairTokens',
+        'nio.retired.pairToken',
       ])
       expect(storage.get).not.toHaveBeenCalled()
       expect(storage.set).not.toHaveBeenCalled()
@@ -69,7 +69,9 @@ describe('purgeRetiredPairTokenStorage', () => {
     const remove = vi.fn(async () => {
       throw failure
     })
-    const get = vi.fn(async () => ({ 'motrix.pairToken': 'secret-sentinel' }))
+    const get = vi.fn(async () => ({
+      'nio.retired.pairToken': 'secret-sentinel',
+    }))
     const set = vi.fn(async () => undefined)
     const storage = { remove, get, set }
 

@@ -3,7 +3,7 @@ import { extensionBrowser as browser } from '@/shared/browser'
  * Durable MBP1 client credentials (bridge-pairing-protocol.md §6.7, §12).
  *
  * The wire principal identifies the browser profile. `BackendAuthority` is a
- * separate, client-local namespace which prevents two Motrix backends from
+ * separate, client-local namespace which prevents two Nio Downloader backends from
  * sharing credentials for that principal. Authentication stays below MDXP;
  * neither the authority nor its storage key is added to the MBP1 transcript.
  *
@@ -131,7 +131,6 @@ type ReadResult =
   | { kind: 'corrupt' }
 
 const STORAGE_KEY = 'nio.mbp1.credentials'
-const LEGACY_STORAGE_KEY = 'motrix.mbp1.credentials'
 const PROVISIONAL_TTL_MS = 10 * 60_000
 const MAX_INSTANCE_ID_LENGTH = 128
 const ACTIVE_KEY_DOMAIN = 'MBP1/credential-active/v2'
@@ -447,17 +446,8 @@ async function loadSet(
     string,
     unknown
   >
-  let raw = object[STORAGE_KEY]
-  let hasKey = Object.hasOwn(object, STORAGE_KEY)
-  if (!hasKey) {
-    const legacy = (await browser.storage.local.get(
-      LEGACY_STORAGE_KEY
-    )) as Record<string, unknown>
-    if (Object.hasOwn(legacy, LEGACY_STORAGE_KEY)) {
-      raw = legacy[LEGACY_STORAGE_KEY]
-      hasKey = true
-    }
-  }
+  const raw = object[STORAGE_KEY]
+  const hasKey = Object.hasOwn(object, STORAGE_KEY)
   const result = readStoredSet(raw, hasKey)
   if (result.kind === 'future') {
     if (forMutation) throw new UnsupportedCredentialStoreVersionError()

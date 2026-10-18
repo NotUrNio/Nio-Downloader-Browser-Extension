@@ -43,7 +43,7 @@ export function TakeoverSection({
   const { t } = useTranslation()
   const unknownSizeItems = {
     chrome: t('options.takeover.unknownSizeBrowser'),
-    motrix: t('options.takeover.unknownSizeNioDownloader'),
+    nio: t('options.takeover.unknownSizeNioDownloader'),
   }
   const availability = useTakeoverAvailability()
   const confirmationSupported = supportsAutoOpenPopup()
@@ -196,8 +196,8 @@ export function TakeoverSection({
                         <SelectItem value="chrome">
                           {unknownSizeItems.chrome}
                         </SelectItem>
-                        <SelectItem value="motrix">
-                          {unknownSizeItems.motrix}
+                        <SelectItem value="nio">
+                          {unknownSizeItems.nio}
                         </SelectItem>
                       </SelectContent>
                     </Select>

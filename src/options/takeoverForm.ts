@@ -60,7 +60,7 @@ export function formToConfig(
     downloadMode: form.downloadMode ?? 'direct',
     enabled: form.enabled,
     consentAckVersion,
-    defaultAction: 'motrix',
+    defaultAction: 'nio',
     unknownSizeAction: form.unknownSizeAction,
     rules,
   }

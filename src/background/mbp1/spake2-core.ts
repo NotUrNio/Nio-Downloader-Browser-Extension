@@ -260,7 +260,7 @@ function os2ip(bytes: Uint8Array): bigint {
  * Exported rather than duplicated at the call site because a second big-endian
  * decoder is a second chance to write a little-endian one, and the resulting
  * `w` would be wrong in a way no local test could see: both sides would still
- * agree on `pA`, and only key confirmation against the *real* Motrix would
+ * agree on `pA`, and only key confirmation against the *real* Nio Downloader would
  * fail.
  */
 export function scalarFromBytes(bytes: Uint8Array): bigint {

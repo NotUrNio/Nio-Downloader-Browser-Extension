@@ -14,7 +14,7 @@ function fixture() {
   const config = { master: false, confirm: true, error: true, reminder: true }
   const store = { get: vi.fn(async () => config), set: vi.fn(async () => {}) }
   const deps = {
-    extensionId: 'motrix',
+    extensionId: 'nio-downloader',
     pageURLs: [
       'safari-web-extension://abc/options.html',
       'safari-web-extension://abc/popup.html',
@@ -33,7 +33,7 @@ function fixture() {
   }
 }
 const options = {
-  id: 'motrix',
+  id: 'nio-downloader',
   url: 'safari-web-extension://abc/options.html#general',
   tab: { id: 5 },
   frameId: 0,
@@ -51,7 +51,7 @@ it('accepts the real settings tab and popup without requesting permission or sav
   })
   expect(
     await f.handlers.openSettings(undefined, {
-      id: 'motrix',
+      id: 'nio-downloader',
       url: f.deps.pageURLs[1],
     })
   ).toEqual({ opened: true })

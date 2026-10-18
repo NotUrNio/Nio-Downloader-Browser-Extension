@@ -18,9 +18,9 @@ const { values } = parseArgs({
 })
 if (values.help) {
   console.log(
-    'Prepare a signed Motrix desktop copy with Safari bootstrap service and registration tool.\n' +
-      'MOTRIX_NATIVE_HOST_SOURCE=/path/to/native-host node scripts/safari-desktop-package.mjs --source-app /path/to/Motrix.app --team TEAMID --identity SIGNING_IDENTITY\n' +
-      'The source app is preserved. Output is .cache/safari-native/desktop/Motrix.app; nothing is installed, launched, or registered.'
+    'Prepare a signed Nio Downloader desktop copy with Safari bootstrap service and registration tool.\n' +
+      'NIODOWNLOADER_NATIVE_HOST_SOURCE=/path/to/native-host node scripts/safari-desktop-package.mjs --source-app /path/to/NioDownloader.app --team TEAMID --identity SIGNING_IDENTITY\n' +
+      'The source app is preserved. Output is .cache/safari-native/desktop/NioDownloader.app; nothing is installed, launched, or registered.'
   )
   process.exit(0)
 }
@@ -61,7 +61,7 @@ function run(command, args, input) {
     throw new Error(`${command} failed: ${result.stderr}`)
   return result.stdout
 }
-const parentRequirement = `=anchor apple generic and certificate leaf[subject.OU] = "${values.team}" and (identifier "app.niodownloader.native" or identifier "app.motrix.native")`
+const parentRequirement = `=anchor apple generic and certificate leaf[subject.OU] = "${values.team}" and identifier "app.niodownloader.native"`
 if (existsSync(app)) {
   // A registered BundleProgram points inside this copy. Never replace live code.
   run('/usr/bin/codesign', [
@@ -72,11 +72,7 @@ if (existsSync(app)) {
     parentRequirement,
     app,
   ])
-  const existingRegistrar = existsSync(
-    join(app, 'Contents/MacOS/NioSafariRegistrar')
-  )
-    ? join(app, 'Contents/MacOS/NioSafariRegistrar')
-    : join(app, 'Contents/MacOS/MotrixSafariRegistrar')
+  const existingRegistrar = join(app, 'Contents/MacOS/NioSafariRegistrar')
   if (!existsSync(existingRegistrar)) {
     throw new Error('Existing desktop output has no trusted registration tool')
   }

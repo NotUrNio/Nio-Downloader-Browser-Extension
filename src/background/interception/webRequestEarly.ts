@@ -27,9 +27,7 @@ export interface WebRequestEarlyConfirmDeps {
 }
 
 const EARLY_KEY = 'nio.earlyTakeover'
-const LEGACY_EARLY_KEY = 'motrix.earlyTakeover'
 const CONFIG_KEY = 'nio.takeoverConfig'
-const LEGACY_CONFIG_KEY = 'motrix.takeoverConfig'
 export const EARLY_PREFLIGHT_MS = 1500
 
 interface EarlyRequestDetails {
@@ -201,8 +199,8 @@ async function submitCancelled(
 }
 
 /** Short, read-only preflight, then cancel and deliver in a separate task.
- * No user interaction or Motrix submission is awaited by the blocking event.
- * As with the native adapter, an accepted Motrix task must replay the URL;
+ * No user interaction or Nio Downloader submission is awaited by the blocking event.
+ * As with the native adapter, an accepted Nio Downloader task must replay the URL;
  * strictly one-use URLs cannot be made replayable by this API.
  */
 export function registerWebRequestEarlyTakeover(
@@ -229,20 +227,14 @@ export function registerWebRequestEarlyTakeover(
   })()
   browser.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local') return
-    const earlyChange = changes[EARLY_KEY] ?? changes[LEGACY_EARLY_KEY]
+    const earlyChange = changes[EARLY_KEY]
     if (earlyChange) {
       earlyGeneration += 1
       earlyEnabled =
         (earlyChange.newValue as { enabled?: boolean } | undefined)?.enabled !==
         false
     }
-    if (
-      changes[EARLY_KEY] ||
-      changes[LEGACY_EARLY_KEY] ||
-      changes[CONFIG_KEY] ||
-      changes[LEGACY_CONFIG_KEY]
-    )
-      generation += 1
+    if (changes[EARLY_KEY] || changes[CONFIG_KEY]) generation += 1
   })
 
   const prepare = async (
@@ -272,7 +264,7 @@ export function registerWebRequestEarlyTakeover(
       sizeBytes: Number.isFinite(length) && length > 0 ? length : null,
       origin: 'auto',
     })
-    if (decideTakeover(cfg, target) !== 'motrix') return null
+    if (decideTakeover(cfg, target) !== 'nio') return null
     if (cfg.downloadMode !== 'confirm') {
       if (isSensitiveDomain(hostOf(target.url))) return null
       if (

@@ -15,10 +15,7 @@ export default defineConfig(({ command, mode }) => {
   const firefox = mode === 'firefox'
   const safari = mode === 'safari'
   const webStore =
-    !safari &&
-    (mode === 'webstore' ||
-      process.env.NIO_BUILD === 'webstore' ||
-      process.env.MOTRIX_BUILD === 'webstore')
+    !safari && (mode === 'webstore' || process.env.NIO_BUILD === 'webstore')
   const excludeYouTube = webStore || firefox || safari
   const safariRelease =
     safari && process.env.NIODOWNLOADER_SAFARI_RELEASE === '1'
@@ -65,28 +62,13 @@ export default defineConfig(({ command, mode }) => {
         safari ? 'safari' : firefox ? 'firefox' : 'chromium'
       ),
       __NIO_BUILD__: JSON.stringify(excludeYouTube ? 'webstore' : 'full'),
-      __MOTRIX_BUILD__: JSON.stringify(excludeYouTube ? 'webstore' : 'full'),
       // Dev-only §7.3 backoff override (see shared/buildFlags.ts). Never
       // honored in a Web Store build: the define is forced to undefined
       // here regardless of the environment.
       __NIO_DEV_PAIR_BACKOFF_MS__: (() => {
         if (webStore) return 'undefined'
         const parsed = Number.parseInt(
-          process.env.NIO_DEV_PAIR_BACKOFF_MS ??
-            process.env.MOTRIX_DEV_PAIR_BACKOFF_MS ??
-            '',
-          10
-        )
-        return Number.isFinite(parsed) && parsed > 0
-          ? String(parsed)
-          : 'undefined'
-      })(),
-      __MOTRIX_DEV_PAIR_BACKOFF_MS__: (() => {
-        if (webStore) return 'undefined'
-        const parsed = Number.parseInt(
-          process.env.NIO_DEV_PAIR_BACKOFF_MS ??
-            process.env.MOTRIX_DEV_PAIR_BACKOFF_MS ??
-            '',
+          process.env.NIO_DEV_PAIR_BACKOFF_MS ?? '',
           10
         )
         return Number.isFinite(parsed) && parsed > 0

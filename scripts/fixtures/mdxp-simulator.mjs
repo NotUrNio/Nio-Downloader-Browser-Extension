@@ -41,7 +41,7 @@ export function createMdxpSimulator(server) {
       const reject = (code, message) =>
         send({ jsonrpc: '2.0', id, error: { code, message } })
       if (message.jsonrpc !== '2.0') return reject(-32600, 'Invalid request')
-      if (method === 'nio/initialize' || method === 'motrix/initialize') {
+      if (method === 'nio/initialize') {
         const parsed = InitializeParamsSchema.safeParse(params)
         if (!parsed.success || parsed.data.client.kind !== 'extension')
           return reject(-32602, 'Invalid extension initialization')
@@ -51,7 +51,7 @@ export function createMdxpSimulator(server) {
           InitializeResultSchema.parse({
             protocolVersion: '1.0',
             server: {
-              name: 'motrix-mdxp-simulator',
+              name: 'niodownloader',
               version: '1.0',
               runtime: 'server',
             },

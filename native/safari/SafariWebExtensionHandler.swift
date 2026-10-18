@@ -21,8 +21,7 @@ final class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
         case .bootstrap(let request):
             // Configuration comes only from the signed extension bundle, never JavaScript.
             // Only signed bootstrap builds embed this configuration.
-            let settings = (Bundle.main.object(forInfoDictionaryKey: "NioBootstrapIPC") as? [String: String])
-                ?? (Bundle.main.object(forInfoDictionaryKey: "MotrixBootstrapIPC") as? [String: String])
+            let settings = Bundle.main.object(forInfoDictionaryKey: "NioBootstrapIPC") as? [String: String]
             guard let settings,
                   Set(settings.keys) == ["TeamIdentifier", "ClientBundleIdentifier", "ServiceBundleIdentifier", "AppGroupIdentifier"],
                   let team = settings["TeamIdentifier"],

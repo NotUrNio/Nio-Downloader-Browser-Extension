@@ -2,8 +2,8 @@ import { extensionBrowser as browser } from '@/shared/browser'
 
 /** Retired credential namespaces that must never be reused. */
 const RETIRED_PAIR_TOKEN_STORAGE_KEYS = [
-  'motrix.pairTokens',
-  'motrix.pairToken',
+  'nio.retired.pairTokens',
+  'nio.retired.pairToken',
 ]
 
 export interface StorageKeyRemover {

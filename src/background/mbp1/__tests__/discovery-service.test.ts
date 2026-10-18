@@ -204,7 +204,7 @@ describe('DiscoveryService', () => {
       expect(await d.tryPinnedPort('c1')).toBeNull()
     })
 
-    it('rejects a non-Motrix service squatting the pinned port', async () => {
+    it('rejects a non-Nio service squatting the pinned port', async () => {
       const d = make({
         pins: pinReader({ port: 16803, instanceId: 'inst-x' }),
         fetchImpl: discoveryFetch(() =>
@@ -378,7 +378,7 @@ describe('DiscoveryService', () => {
       [
         'a wrong app name',
         {
-          app: 'motrix',
+          app: 'wrong-app',
           apiVersion: 1,
           instanceId: 'i-1',
           appVersion: '2.0.0',
@@ -413,7 +413,7 @@ describe('DiscoveryService', () => {
       ])
     })
 
-    it('accepts a newer apiVersion rather than hiding a newer Motrix', async () => {
+    it('accepts a newer apiVersion rather than hiding a newer Nio Downloader', async () => {
       const d = make({
         candidatePorts: [16802],
         fetchImpl: discoveryFetch(() =>
@@ -778,7 +778,7 @@ describe('DiscoveryService', () => {
       ])
     })
 
-    it('fails closed when the NM port has no Motrix discovery document', async () => {
+    it('fails closed when the NM port has no Nio Downloader discovery document', async () => {
       const d = make({
         candidatePorts: [16803],
         fetchImpl: discoveryFetch(() => deadBody()),
@@ -1028,7 +1028,7 @@ describe('DiscoveryService', () => {
       })
       const pending = d.wakeAndPoll()
       await vi.advanceTimersByTimeAsync(2_000)
-      // Motrix may already be starting for another reason: poll regardless.
+      // Nio Downloader may already be starting for another reason: poll regardless.
       expect(await pending).toEqual([
         {
           transport: 'probe',

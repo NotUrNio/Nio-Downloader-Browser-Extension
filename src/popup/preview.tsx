@@ -80,7 +80,7 @@ let previewTakeover: TakeoverConfig = {
   openTaskPanelAfterSubmit: false,
   enabled: true,
   consentAckVersion: 1,
-  defaultAction: 'motrix',
+  defaultAction: 'nio',
   unknownSizeAction: 'chrome',
   rules: [],
 }

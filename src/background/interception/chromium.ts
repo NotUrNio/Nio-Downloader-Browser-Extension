@@ -120,7 +120,7 @@ async function handleHeld(
       typeof item.totalBytes === 'number' && item.totalBytes > 0
         ? item.totalBytes
         : null
-    // The probe rehearses Motrix's own GET. Its Content-Type is the only
+    // The probe rehearses Nio Downloader's own GET. Its Content-Type is the only
     // evidence we get that the browser's download was not a plain GET (see
     // replayFidelity), and its length feeds minSizeMB rules. Run it at most
     // once; apply unknownSizeAction only if the probe also cannot find a size.
@@ -161,7 +161,7 @@ async function handleHeld(
       'state=',
       deps.manager.getState()
     )
-    if (decision !== 'motrix') return // finally releases the native download
+    if (decision !== 'nio') return // finally releases the native download
     const { contentType } = await runProbe()
     if (
       !isFaithfulReplay({

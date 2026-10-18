@@ -579,7 +579,7 @@ describe('PairingFlow happy path (§6.1-§6.7, against the §13 vectors)', () =>
     const h = makeHarness()
     await h.backoff.recordFailure(1_699_000_000_000)
     await h.flow.run(runArgs())
-    // The caller owns the socket from here: MDXP `motrix/initialize` runs
+    // The caller owns the socket from here: MDXP `nio/initialize` runs
     // inside the envelope the flow just returned.
     expect(h.channel.closeCount).toBe(0)
     expect(backing[BACKOFF_KEY]).toBeUndefined()

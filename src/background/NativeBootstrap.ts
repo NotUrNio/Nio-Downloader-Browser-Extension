@@ -1,7 +1,7 @@
 import { extensionBrowser as browser } from '@/shared/browser'
 /**
- * Native Messaging bootstrap. Connects to the Motrix native host shim,
- * which reads endpoint.json (or launches Motrix if needed) and reports
+ * Native Messaging bootstrap. Connects to the Nio Downloader native host shim,
+ * which reads endpoint.json (or launches Nio Downloader if needed) and reports
  * back the local WebSocket port plus a one-shot pairing nonce. The NM
  * channel exists only for this handoff — once we know port + nonce, we
  * disconnect and use WebSocket for all subsequent traffic.
@@ -78,7 +78,7 @@ export class NativeBootstrap implements BootstrapProvider {
     // Checked before ever touching Native Messaging: the host's answer to a
     // wrong-length `bindingPub` is silence (parse_host_request returns None
     // and the process exits without a reply), which is indistinguishable
-    // from "Motrix is not installed" — a diagnosis this project protects
+    // from "Nio Downloader is not installed" — a diagnosis this project protects
     // deliberately. Fail with something diagnosable instead.
     if (
       opts.bindingPub !== undefined &&
@@ -98,7 +98,7 @@ export class NativeBootstrap implements BootstrapProvider {
     }
 
     // DEBUG: spawns a fresh native host process (which may relaunch
-    // Motrix). TODO(remove-after-rootcause).
+    // Nio Downloader). TODO(remove-after-rootcause).
     log.info(`[NM] connectNative(${hostName}) allowLaunch=${allowLaunch}`)
     const port = browser.runtime.connectNative(hostName) as unknown as NMPort
 

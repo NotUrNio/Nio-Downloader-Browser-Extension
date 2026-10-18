@@ -20,9 +20,9 @@
  * ## The one rule that makes this endpoint safe against an impostor
  *
  * §8 requires the client to send **no application data** — not even MDXP
- * `motrix/initialize` — until `reconnectAccept.mac` has been verified against
+ * `nio/initialize` — until `reconnectAccept.mac` has been verified against
  * the locally computed `server` MAC, in constant time. A listener that is not
- * the real Motrix (something else bound to the port, or a stale process) would
+ * the real Nio Downloader (something else bound to the port, or a stale process) would
  * otherwise learn whatever the first application frame reveals for free. That
  * verification happens before a single byte of §6.7's post-auth transaction is
  * touched, and before the caller ever sees the returned `EnvelopeCodec`.
@@ -41,8 +41,8 @@
  * an impostor: `RT` binds `credentialId`, `browser`, `verifiedOrigin`, AND
  * `instanceId`, and the orchestrator may supply `instanceId` from an
  * untrusted `/discovery` hint when no pin exists yet for this credential —
- * so a wrong hint against the *genuine* Motrix produces the identical
- * mismatch as a real "not my Motrix" impostor. Either way the
+ * so a wrong hint against the *genuine* Nio Downloader produces the identical
+ * mismatch as a real "not my Nio Downloader" impostor. Either way the
  * credential was never disproved — only this pin's claim about where it
  * lives was — so the credential is kept and only the **pin** is cleared: a
  * later attempt sweeps for the real instance instead of reusing an unproven
@@ -156,7 +156,7 @@ export type ReconnectFailureReason =
    * `browser`, `verifiedOrigin`, AND `instanceId`, and the orchestrator may
    * supply `instanceId` from an untrusted `/discovery` hint when no pin
    * exists yet for this credential — so a wrong hint against the *genuine*
-   * Motrix produces the identical mismatch as a real "not my Motrix"
+   * Nio Downloader produces the identical mismatch as a real "not my Nio Downloader"
    * impostor. This flow has already cleared the pin by the
    * time it throws this, and that is correct under either reading: if the
    * `instanceId` came from the pin, the pin's claim is disproved and
@@ -308,7 +308,7 @@ export interface ReconnectFlowRunArgs {
 }
 
 export interface ReconnectFlowResult {
-  /** The §8 channel, for MDXP `motrix/initialize` to run inside. */
+  /** The §8 channel, for MDXP `nio/initialize` to run inside. */
   envelope: EnvelopeCodec
 }
 
@@ -339,7 +339,7 @@ export class ReconnectFlow {
       return await this.session(args)
     } catch (error) {
       // Closed on every failure path. On success the caller owns the socket
-      // from here on — MDXP `motrix/initialize` runs inside the envelope this
+      // from here on — MDXP `nio/initialize` runs inside the envelope this
       // returns.
       this.deps.channel.close()
       throw error instanceof ReconnectFlowError
@@ -410,7 +410,7 @@ export class ReconnectFlow {
     // exactly what a proven mismatch requires — but no application data
     // leaves this side until this check passes.
     if (!timingSafeEqualBytes(b64uDecode(accept.mac), macs.server)) {
-      // "Not my Motrix": the endpoint is disproved, not the credential.
+      // "Not my Nio Downloader": the endpoint is disproved, not the credential.
       if (args.remoteV1Url === undefined) {
         await this.deps.pins.clear(credential.credentialId)
       }

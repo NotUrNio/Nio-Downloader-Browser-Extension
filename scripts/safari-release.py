@@ -111,7 +111,7 @@ def validate_payload(files, meta):
             require(name in BINARIES and data[:4] in MACH, 'Unexpected executable content')
         if name.endswith(('.js', '.html', '.map')):
             require(not name.endswith('.map'), 'Source map in release')
-            require(not re.search(rb'sourceMappingURL|(?:nio(?:downloader)?|motrix)\.safari\.featureProbe\.v1|safariNativeProbe|(?:Nio|Motrix) Native Verification|@vite/client', data), 'Development code in release')
+            require(not re.search(rb'sourceMappingURL|nio(?:downloader)?\.safari\.featureProbe\.v1|safariNativeProbe|Nio Native Verification|@vite/client', data), 'Development code in release')
         require(not name.endswith(('popup-preview.html', 'options-preview.html')), 'Preview in release')
     for binary in BINARIES:
         require(binary in files and files[binary][:4] in MACH, 'Missing Mach-O executable')

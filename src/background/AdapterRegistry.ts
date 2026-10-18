@@ -28,7 +28,7 @@ export class BgAdapterRegistry {
     }))
   }
 
-  /** Adapter decls for motrix/initialize.adapters[]. */
+  /** Adapter decls for nio/initialize.adapters[]. */
   list(): AdapterDecl[] {
     return this.entries.map((e) => e.decl)
   }

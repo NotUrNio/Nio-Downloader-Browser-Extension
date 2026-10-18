@@ -69,7 +69,7 @@ describe('confirmation respects automatic takeover policy', () => {
     expect(f.confirm).not.toHaveBeenCalled()
     expect(f.captureGuard).not.toHaveBeenCalled()
   })
-  it.each(['chrome', 'motrix'] as const)(
+  it.each(['chrome', 'nio'] as const)(
     'uses the configured handler for unknown size: %s',
     async (unknownSizeAction) => {
       const f = fixture()
@@ -80,7 +80,7 @@ describe('confirmation respects automatic takeover policy', () => {
         f.deps
       )
       expect(f.confirm).toHaveBeenCalledTimes(
-        unknownSizeAction === 'motrix' ? 1 : 0
+        unknownSizeAction === 'nio' ? 1 : 0
       )
     }
   )

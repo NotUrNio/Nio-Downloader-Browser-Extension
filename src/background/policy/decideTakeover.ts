@@ -37,17 +37,17 @@ function ruleMatches(rule: TakeoverRule, target: TakeoverTarget): boolean {
 export function decideTakeover(
   config: TakeoverConfig,
   target: TakeoverTarget
-): 'motrix' | 'chrome' {
-  // An explicit right-click "Download with Motrix" is direct user intent, not
-  // a candidate for the auto-interception policy. Hand it to Motrix regardless
+): 'nio' | 'chrome' {
+  // An explicit right-click "Download with Nio Downloader" is direct user intent, not
+  // a candidate for the auto-interception policy. Hand it to Nio Downloader regardless
   // of config.enabled / rules / defaultAction (those gate automatic capture
   // only). Without this, the right-click silently no-ops whenever "Send
-  // eligible downloads to Motrix" is off.
-  if (target.origin === 'context-menu') return 'motrix'
+  // eligible downloads to Nio Downloader" is off.
+  if (target.origin === 'context-menu') return 'nio'
   if (!config.enabled) return 'chrome'
   for (const rule of config.rules) {
     if (ruleMatches(rule, target)) {
-      return rule.action === 'motrix' ? 'motrix' : 'chrome' // 'ask' reserved for Plan 2 -> chrome
+      return rule.action === 'nio' ? 'nio' : 'chrome' // 'ask' reserved for Plan 2 -> chrome
     }
   }
   return target.sizeBytes === null

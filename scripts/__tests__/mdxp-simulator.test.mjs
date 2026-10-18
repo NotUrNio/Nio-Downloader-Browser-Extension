@@ -72,7 +72,7 @@ async function fixture(t, scenario = 'normal') {
         socket.once('close', close)
         socket.send(JSON.stringify({ jsonrpc: '2.0', id, method, params }))
       })
-    const response = await request('motrix/initialize', initialize)
+    const response = await request('nio/initialize', initialize)
     assert.equal(response.result.protocolVersion, '1.0')
     return request
   }

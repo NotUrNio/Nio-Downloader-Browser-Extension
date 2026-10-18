@@ -27,7 +27,6 @@ import {
 } from '@/shared/integration'
 
 const STORAGE_KEY = 'nio.downloadOperations.v1'
-const LEGACY_STORAGE_KEY = 'motrix.downloadOperations.v1'
 const MAX_RECORDS = 1000
 
 interface OperationRecord extends DownloadOperation {
@@ -294,11 +293,7 @@ export class DownloadSubmissionService {
     const storage = this.deps.storage
     if (!storage) return
     const obj = await storage.get(STORAGE_KEY)
-    let value = obj[STORAGE_KEY]
-    if (value === undefined) {
-      const legacyObj = await storage.get(LEGACY_STORAGE_KEY)
-      value = legacyObj[LEGACY_STORAGE_KEY]
-    }
+    const value = obj[STORAGE_KEY]
     if (value === undefined) return
     if (!Array.isArray(value) || value.length > MAX_RECORDS)
       throw new DownloadPreparationError(DOWNLOAD_ERROR.interrupted)

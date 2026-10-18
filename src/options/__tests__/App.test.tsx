@@ -33,7 +33,7 @@ beforeEach(() => {
         openTaskPanelAfterSubmit: false,
         enabled: false,
         consentAckVersion: 0,
-        defaultAction: 'motrix',
+        defaultAction: 'nio',
         rules: [],
       }
     if (env.kind === 'bg.getEndpointConfig')

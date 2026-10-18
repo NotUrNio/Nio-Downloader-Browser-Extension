@@ -8,8 +8,8 @@ any replacement transfer. A successful preflight returns `{ cancel: true }` and
 schedules delivery in a later task; it does not await a confirmation form inside
 the blocking listener.
 
-The independent `motrix.earlyTakeover` setting defaults to enabled. The normal
-`motrix.takeoverConfig.enabled` setting defaults to disabled through the existing
+The independent `nio.earlyTakeover` setting defaults to enabled. The normal
+`nio.takeoverConfig.enabled` setting defaults to disabled through the existing
 configuration store. Startup waits for the initial read within the preflight
 budget; a newer storage event must not be overwritten by that read. Settings and
 endpoint changes fence pending delivery.
@@ -24,8 +24,8 @@ Ordinary native confirmations continue to preserve their existing response.
 
 | Outcome | Owner/action |
 | --- | --- |
-| Direct accepted | Motrix; presentation failure cannot replay |
-| Direct unknown | Motrix may own it; do not replay |
+| Direct accepted | Nio Downloader; presentation failure cannot replay |
+| Direct unknown | Nio Downloader may own it; do not replay |
 | Direct browser | Handoff already replayed; do not replay again |
 | Direct skipped/failed | Attempt browser replay once |
 | Confirm accepted | Confirmation submission owns it |
@@ -53,12 +53,12 @@ media, POST, and other request types stay on the existing path.
   adapters with real webRequest/download APIs and a local HTTP server. It checks
   native download counts, GET counts, a quiet confirmation interval, explicit
   browser replay, failed/unknown submission, missing Content-Type, defaults,
-  exclusions, size rules, PDF, and the kill switch. Motrix and confirmation UI
+  exclusions, size rules, PDF, and the kill switch. Nio Downloader and confirmation UI
   interaction are simulated; the production confirmation service/actions run.
 - Existing CI executes that script on Firefox 143.0 and latest.
 
-A strictly one-use URL cannot be replayed reliably by Motrix or by a browser
+A strictly one-use URL cannot be replayed reliably by Nio Downloader or by a browser
 fallback after cancellation. This API cannot transfer an already-open browser
-response to Motrix. Sites requiring that behavior must remain browser-owned via
+response to Nio Downloader. Sites requiring that behavior must remain browser-owned via
 site exclusion or the early kill switch; tests passing do not remove this
 protocol limitation.

@@ -11,7 +11,7 @@ const MAX_IDEMPOTENCY_KEY_LENGTH = 128
 /**
  * Completes a trusted media submission with the caller's logical-operation
  * key. Parsing the complete object keeps the background as the protocol
- * boundary and guarantees the key reaches Motrix unchanged.
+ * boundary and guarantees the key reaches Nio Downloader unchanged.
  */
 export function applyCallerIdempotencyKey(
   params: DownloadSubmitParams,

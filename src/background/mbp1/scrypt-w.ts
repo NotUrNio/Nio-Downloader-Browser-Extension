@@ -46,7 +46,7 @@ export function deriveW(codeNormalized: string, pairNonce: string): Uint8Array {
   // with `Buffer.from(s, 'ascii')`, which truncates each character to its low
   // byte, while this side uses UTF-8. A non-ASCII input would therefore derive
   // a *different* `w` on each side, and the only symptom would be key
-  // confirmation failing against a real Motrix — the least diagnosable failure
+  // confirmation failing against a real Nio Downloader — the least diagnosable failure
   // in the protocol. Both sides refuse rather than encode differently.
   //
   // Neither argument should be able to arrive non-ASCII — `normalizePairingCode`

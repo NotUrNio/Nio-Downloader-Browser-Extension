@@ -10,7 +10,7 @@ function fixture() {
   const manager = {
     getState: vi.fn(() => 'connected' as const),
     getServerIdentity: vi.fn(() => ({
-      name: 'Motrix',
+      name: 'niodownloader',
       version: '2',
       runtime: 'electron' as const,
       instanceId: 'instance-a',
@@ -87,7 +87,7 @@ describe('private directory queries', () => {
     })
     f.assertCurrent.mockReset()
     f.manager.getServerIdentity.mockReturnValueOnce({
-      name: 'Motrix',
+      name: 'niodownloader',
       version: '2',
       runtime: 'electron',
       instanceId: 'old-instance',

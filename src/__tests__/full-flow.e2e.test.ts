@@ -33,9 +33,9 @@ const CLIENT_INFO: ConnectionManagerOptions['clientInfo'] = {
 }
 
 /**
- * Mock Motrix bridge that:
- *   - Responds to `motrix/initialize` with a fake server descriptor.
- *   - After we observe `motrix/initialized`, fires url/probe and then
+ * Mock Nio Downloader bridge that:
+ *   - Responds to `nio/initialize` with a fake server descriptor.
+ *   - After we observe `nio/initialized`, fires url/probe and then
  *     url/resolve requests AT the ext and collects the replies.
  */
 
@@ -95,14 +95,18 @@ async function startMockBridge(): Promise<{
         error?: unknown
       }
 
-      if (msg.method === 'motrix/initialize' && msg.id !== undefined) {
+      if (msg.method === 'nio/initialize' && msg.id !== undefined) {
         ws.send(
           JSON.stringify({
             jsonrpc: '2.0',
             id: msg.id,
             result: {
               protocolVersion: '1.0',
-              server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+              server: {
+                name: 'niodownloader',
+                version: '2.0',
+                runtime: 'electron',
+              },
               capabilities: {
                 ffmpegAvailable: true,
                 selectionKinds: ['direct'],
@@ -115,7 +119,7 @@ async function startMockBridge(): Promise<{
         )
         return
       }
-      if (msg.method === 'motrix/initialized') {
+      if (msg.method === 'nio/initialized') {
         initializedResolve(msg.params)
         return
       }

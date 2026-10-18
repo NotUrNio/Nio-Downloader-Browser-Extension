@@ -1,14 +1,27 @@
+import { existsSync, readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { defineManifest } from '@crxjs/vite-plugin'
 import pkg from './package.json' with { type: 'json' }
 
 export default defineManifest((env) => {
   const firefox = env.mode === 'firefox'
   const safari = env.mode === 'safari'
+  const isChromiumDev = env.mode === 'chromium-dev'
   const webStore =
-    env.mode === 'webstore' ||
-    process.env.NIO_BUILD === 'webstore' ||
-    process.env.MOTRIX_BUILD === 'webstore'
+    env.mode === 'webstore' || process.env.NIO_BUILD === 'webstore'
   const includeYouTube = !webStore && !firefox && !safari
+
+  let devKey: string | undefined
+  if (isChromiumDev) {
+    const devKeyPath = resolve(
+      import.meta.dirname,
+      '../../_work/keys/dev-extension-key.pub.txt'
+    )
+    if (existsSync(devKeyPath)) {
+      devKey = readFileSync(devKeyPath, 'utf8').trim()
+    }
+  }
+
   const genericSnifferScripts = [
     {
       matches: ['http://*/*', 'https://*/*'],
@@ -34,6 +47,7 @@ export default defineManifest((env) => {
     name: '__MSG_appName__',
     version: pkg.version,
     description: '__MSG_appDescription__',
+    ...(devKey ? { key: devKey } : {}),
     icons: {
       16: 'icons/icon-16.png',
       32: 'icons/icon-32.png',
@@ -117,7 +131,7 @@ export default defineManifest((env) => {
           },
           browser_specific_settings: {
             gecko: {
-              id: 'nio-downloader-extension@mozilla.org',
+              id: '{f3165928-2a14-4142-88b8-561b818602a6}',
               // Firefox 140 introduced the built-in data-transmission consent
               // experience on desktop, while Firefox for Android gained the
               // same manifest support in 142. Use the shared floor so AMO does

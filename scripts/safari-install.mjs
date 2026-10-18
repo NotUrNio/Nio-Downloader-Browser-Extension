@@ -110,7 +110,7 @@ export function verifySafariApp(app, team) {
   }
   const appInfo = readPlist(join(app, 'Contents/Info.plist'))
   const extensionInfo = readPlist(join(extension, 'Contents/Info.plist'))
-  const ipc = extensionInfo.NioBootstrapIPC ?? extensionInfo.MotrixBootstrapIPC
+  const ipc = extensionInfo.NioBootstrapIPC
   if (
     !ipc ||
     Object.keys(ipc).length !== Object.keys(configuration).length ||
@@ -140,8 +140,7 @@ export function verifySafariApp(app, team) {
     readFileSync(join(resources, 'manifest.json'), 'utf8')
   )
   if (
-    (manifest.name !== 'Nio Downloader Extension' &&
-      manifest.name !== 'Motrix Extension') ||
+    manifest.name !== 'Nio Downloader Extension' ||
     !Array.isArray(manifest.permissions) ||
     !manifest.permissions.includes('nativeMessaging') ||
     manifest.version.split('.').at(-1) !== String(build) ||
@@ -150,9 +149,6 @@ export function verifySafariApp(app, team) {
     ) ||
     readFileSync(join(resources, 'popup.html'), 'utf8').includes(
       'Nio Native Verification'
-    ) ||
-    readFileSync(join(resources, 'popup.html'), 'utf8').includes(
-      'Motrix Native Verification'
     )
   )
     throw new Error(

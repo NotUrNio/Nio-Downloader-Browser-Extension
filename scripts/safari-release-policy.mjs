@@ -23,7 +23,6 @@ export function validateSafariReleaseOptions(args, environment) {
     'NIODOWNLOADER_SAFARI_FEATURE_PROBE',
     'NIODOWNLOADER_SAFARI_VERIFY_PORT',
     'NIO_DEV_PAIR_BACKOFF_MS',
-    'MOTRIX_DEV_PAIR_BACKOFF_MS',
   ])
     if (environment[name] !== undefined)
       throw new Error(
@@ -54,7 +53,7 @@ export function verifySafariReleaseResources(directory) {
       if (/\.(?:js|html)$/.test(entry.name)) {
         const source = readFileSync(file, 'utf8')
         if (
-          /sourceMappingURL|(?:nio(?:downloader)?|motrix)\.safari\.featureProbe\.v1|safariNativeProbe|(?:Nio|Motrix) Native Verification|@vite\/client/.test(
+          /sourceMappingURL|nio(?:downloader)?\.safari\.featureProbe\.v1|safariNativeProbe|Nio Native Verification|@vite\/client/.test(
             source
           )
         )
@@ -69,7 +68,6 @@ export function verifySafariReleaseResources(directory) {
   const isAllowedName =
     manifest.name === 'Nio Downloader Extension' ||
     manifest.name === 'Nio Downloader Plugin' ||
-    manifest.name === 'Motrix Extension' ||
     manifest.name === '__MSG_appName__'
   if (!isAllowedName || !manifest.permissions?.includes('nativeMessaging'))
     throw new Error(

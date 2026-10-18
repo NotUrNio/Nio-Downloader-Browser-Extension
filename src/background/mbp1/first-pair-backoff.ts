@@ -48,7 +48,6 @@ import { createOperationQueue } from '@/background/mbp1/operation-queue'
 import { DEV_PAIR_BACKOFF_MS } from '@/shared/buildFlags'
 
 const STORAGE_KEY = 'nio.mbp1.firstPairBackoff'
-const LEGACY_STORAGE_KEY = 'motrix.mbp1.firstPairBackoff'
 
 /** §7.3 / Line A `flood-control.ts`: the first lockout, in milliseconds. */
 export const BASE_LOCKOUT_MS = 30_000
@@ -145,13 +144,7 @@ async function read(): Promise<StoredBackoff | null> {
     string,
     unknown
   >
-  let value = obj[STORAGE_KEY]
-  if (value === undefined) {
-    const legacy = (await browser.storage.local.get(
-      LEGACY_STORAGE_KEY
-    )) as Record<string, unknown>
-    value = legacy[LEGACY_STORAGE_KEY]
-  }
+  const value = obj[STORAGE_KEY]
   return readStored(value)
 }
 

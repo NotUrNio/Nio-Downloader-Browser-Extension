@@ -2,7 +2,7 @@
  * MBP1 first-pair state machine (bridge-pairing-protocol.md §6.1, §6.5-§6.7,
  * §7.2, §7.3).
  *
- * The code path a user actually walks through when pairing a browser to Motrix
+ * The code path a user actually walks through when pairing a browser to Nio Downloader
  * for the first time, and the one an online guessing attack targets.
  *
  * ```
@@ -331,7 +331,7 @@ export interface PairingFlowRunArgs {
 
 export interface PairingFlowResult {
   credentialId: string
-  /** The §6.6 channel, for MDXP `motrix/initialize` to run inside. */
+  /** The §6.6 channel, for MDXP `nio/initialize` to run inside. */
   envelope: EnvelopeCodec
   /**
    * The peer's `instanceId`. Safe to use *here* — unlike a `/discovery` hint —
@@ -410,7 +410,7 @@ export class PairingFlow {
       // Closed on **every** failure path, and only on failure: a socket left
       // open past a failed run holds one of the server's three pending dialog
       // slots (§7.3), while on success the caller owns the socket from here on
-      // — MDXP `motrix/initialize` runs inside the envelope this returns, so
+      // — MDXP `nio/initialize` runs inside the envelope this returns, so
       // closing it would tear down the session that was just established.
       this.deps.channel.close()
       throw error instanceof PairingFlowError
@@ -750,7 +750,7 @@ export class PairingFlow {
       if (!timingSafeEqualBytes(b64uDecode(confirmB.cB), result.cB)) {
         // Not a retry. The peer accepted our `cA`, so it had the code — but
         // then failed to prove it holds the matching confirmation key, which no
-        // honest Motrix can do. A wrong *code* never reaches this branch; it
+        // honest Nio Downloader can do. A wrong *code* never reaches this branch; it
         // comes back as `codeMismatch` above.
         throw new PairingFlowError(
           'peerNotAuthentic',

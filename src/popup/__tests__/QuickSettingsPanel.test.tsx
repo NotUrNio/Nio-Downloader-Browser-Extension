@@ -17,7 +17,7 @@ function controller(
       enabled: false,
       openTaskPanelAfterSubmit: false,
       consentAckVersion: 1,
-      defaultAction: 'motrix',
+      defaultAction: 'nio',
       rules: [],
     },
     notifications: {

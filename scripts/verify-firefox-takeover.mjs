@@ -162,7 +162,7 @@ try {
     join(extension, 'manifest.json'),
     JSON.stringify({
       manifest_version: 3,
-      name: 'Motrix Firefox takeover regression fixture',
+      name: 'Nio Downloader Firefox takeover regression fixture',
       version: '1.0',
       permissions: [
         'downloads',
@@ -175,7 +175,7 @@ try {
       host_permissions: ['http://127.0.0.1/*'],
       browser_specific_settings: {
         gecko: {
-          id: 'motrix-takeover-fixture@motrix.app',
+          id: 'nio-takeover-fixture@niodownloader.app',
           data_collection_permissions: { required: ['none'] },
         },
       },
@@ -197,7 +197,7 @@ try {
   await writeFile(
     join(profile, 'user.js'),
     [
-      `user_pref("extensions.webextensions.uuids", ${JSON.stringify(JSON.stringify({ 'motrix-takeover-fixture@motrix.app': uuid }))});`,
+      `user_pref("extensions.webextensions.uuids", ${JSON.stringify(JSON.stringify({ 'nio-takeover-fixture@niodownloader.app': uuid }))});`,
       'user_pref("browser.download.useDownloadDir", true);',
       'user_pref("browser.download.folderList", 2);',
       'user_pref("extensions.logging.enabled", true);',
@@ -353,7 +353,7 @@ try {
     const expectedTasks = [
       'known',
       'probe-only',
-      'unknown-motrix',
+      'unknown-nio',
       'early-default',
       'early-direct',
       'early-no-type',
@@ -425,7 +425,7 @@ try {
     )
     assert.equal(
       result.submits,
-      ['known', 'probe-only', 'unknown-motrix'].includes(name) ? 1 : 0,
+      ['known', 'probe-only', 'unknown-nio'].includes(name) ? 1 : 0,
       `${name}: submits`
     )
     assert.equal(
@@ -448,7 +448,7 @@ try {
       )
     if (name === 'unknown-chrome')
       assert.equal(result.native[0].state, 'in_progress')
-    if (['known', 'probe-only', 'unknown-motrix'].includes(name))
+    if (['known', 'probe-only', 'unknown-nio'].includes(name))
       assert.deepEqual(result.native, [], 'cancelled history must be erased')
     if (name === 'known') {
       assert.ok(result.requests.some((request) => request.method === 'HEAD'))

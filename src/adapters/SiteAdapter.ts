@@ -1,6 +1,6 @@
 import type { UrlResolveParams, UrlResolveResult } from '@niodownloader/mdxp'
 
-/** Adapter metadata reported to Motrix during motrix/initialize. */
+/** Adapter metadata reported to Nio Downloader during nio/initialize. */
 export interface AdapterDecl {
   id: string
   version: string

@@ -8,7 +8,7 @@ export const FIREFOX_CASES = Object.freeze([
   'confirm',
   'small',
   'unknown-chrome',
-  'unknown-motrix',
+  'unknown-nio',
   'early-default',
   'early-direct',
   'early-no-type',

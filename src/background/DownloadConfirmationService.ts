@@ -61,7 +61,6 @@ interface Pending {
 }
 
 const STORAGE_KEY = 'nio.downloadConfirmation.v1'
-const LEGACY_STORAGE_KEY = 'motrix.downloadConfirmation.v1'
 const savedConfirmationSchema = z.object({
   draft: z.object({
     id: z.string(),
@@ -320,11 +319,7 @@ export class DownloadConfirmationService {
     if (!storage || !recover) return
     try {
       const readObj = await storage.get(STORAGE_KEY)
-      let records = readObj[STORAGE_KEY]
-      if (!records) {
-        const legacyObj = await storage.get(LEGACY_STORAGE_KEY)
-        records = legacyObj[LEGACY_STORAGE_KEY]
-      }
+      const records = readObj[STORAGE_KEY]
       if (!Array.isArray(records)) return
       for (const value of records.slice(0, 100)) {
         const parsed = savedConfirmationSchema.safeParse(value)

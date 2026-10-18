@@ -26,7 +26,7 @@ export async function cancelFirefoxDownload(id: number): Promise<void> {
     await browser.downloads.erase({ id })
   } catch (error) {
     // The native item is already cancelled at this point. History cleanup is
-    // cosmetic and must not abort the Motrix submit, which would otherwise
+    // cosmetic and must not abort the Nio Downloader submit, which would otherwise
     // leave the user with a cancelled download and no replacement.
     log.debug('[takeover] Firefox download history cleanup failed', error)
   }
@@ -151,7 +151,7 @@ async function handle(
     )
   item = latest
   logDecision()
-  if (decideTakeover(cfg, target) !== 'motrix') return
+  if (decideTakeover(cfg, target) !== 'nio') return
 
   const { contentType } = await runProbe()
   const current = await readActiveFirefoxDownload(item.id)
@@ -162,7 +162,7 @@ async function handle(
   logDecision()
   if (
     cfg.downloadMode === 'confirm' ||
-    decideTakeover(cfg, target) !== 'motrix' ||
+    decideTakeover(cfg, target) !== 'nio' ||
     !isEligibleDownload(current, deps.selfExtensionId)
   )
     return
@@ -197,7 +197,7 @@ async function handle(
       if (
         !active ||
         config.downloadMode === 'confirm' ||
-        decideTakeover(config, makeTarget(active)) !== 'motrix'
+        decideTakeover(config, makeTarget(active)) !== 'nio'
       )
         throw new Error('Firefox native download no longer eligible')
       await cancelFirefoxDownload(item.id)

@@ -150,9 +150,9 @@ export function ConnectionStatusPanel({
       )}
       {/* Only shown while actually connected — this describes the live
        *  session's pairing, not an error condition. Not a warning about
-       *  Motrix's authenticity: the pairing was still mutually
+       *  Nio Downloader's authenticity: the pairing was still mutually
        *  authenticated by the code, only the host's own corroboration of
-       *  *which* Motrix answered is missing. */}
+       *  *which* Nio Downloader answered is missing. */}
       {isOk && state.degraded && (
         <Alert>
           <AlertTitle>{t('popup.pairing.degradedTitle')}</AlertTitle>

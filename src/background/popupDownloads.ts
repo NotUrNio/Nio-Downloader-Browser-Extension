@@ -54,7 +54,7 @@ export function createPopupDownloadHandlers(deps: PopupDownloadDeps) {
     )
       throw new Error(MEDIA_SUBMIT_ERROR.invalidRequest)
   }
-  // bg.submitMedia: forward a detected media item to Motrix via MDXP.
+  // bg.submitMedia: forward a detected media item to Nio Downloader via MDXP.
   // Gates on selectionKinds capability reported by the server at initialize time;
   // hls/dash require ffmpeg on the desktop side.
   const submitMedia: MessageBusHandler<'bg.submitMedia'> = async (
@@ -150,7 +150,7 @@ export function createPopupDownloadHandlers(deps: PopupDownloadDeps) {
 
   // bg.resolvePageDownload: submit the active tab's watch-page URL for resolution.
   // Used for bilibili/youtube pages where the generic sniffer finds nothing.
-  // Motrix's resolveToMux seam resolves the actual stream URLs server-side.
+  // Nio Downloader's resolveToMux seam resolves the actual stream URLs server-side.
   // Does NOT gate on selectionKinds — 'direct' is always supported and turbo
   // upgrades the submit via resolveToMux on its side.
   const resolvePageDownload: MessageBusHandler<

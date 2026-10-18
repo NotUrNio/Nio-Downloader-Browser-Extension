@@ -161,7 +161,7 @@ Object.assign(window, {
     client = new WebSocketClient()
     connection = await client.connect(
       `${input.baseUrl.replace('http:', 'ws:')}/mdxp?case=${encodeURIComponent(input.name)}`,
-      'motrix-mdxp-test'
+      'nio-mdxp-test'
     )
     connection.listen()
     InitializeResultSchema.parse(
@@ -188,12 +188,12 @@ Object.assign(window, {
     caseName = input.name
     confirmationSettled = false
     await browser.storage.local.set({
-      'motrix.earlyTakeover': {
+      'nio.earlyTakeover': {
         enabled: input.name.startsWith('early-') && input.name !== 'early-kill',
       },
     })
     if (input.name === 'early-default')
-      await browser.storage.local.remove('motrix.earlyTakeover')
+      await browser.storage.local.remove('nio.earlyTakeover')
     config = {
       ...TAKEOVER_DEFAULT,
       enabled: input.name !== 'early-off',
@@ -201,7 +201,7 @@ Object.assign(window, {
         input.name === 'confirm' || input.name.startsWith('early-confirm-')
           ? 'confirm'
           : 'direct',
-      unknownSizeAction: input.name === 'unknown-motrix' ? 'motrix' : 'chrome',
+      unknownSizeAction: input.name === 'unknown-nio' ? 'nio' : 'chrome',
       rules: ['small', 'early-small'].includes(input.name)
         ? [{ id: 'small', match: { minSizeMB: 10 }, action: 'chrome' }]
         : input.name === 'early-excluded'

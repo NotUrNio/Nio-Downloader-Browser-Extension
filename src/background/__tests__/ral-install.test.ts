@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest'
 // MdxpConnection processes a message. The real extension installs the BROWSER
 // RAL by importing the `@niodownloader/mdxp/browser` entry at SW startup
 // (background/index.ts). Without it, the first inbound WS frame throws and the
-// extension can never talk to Motrix.
+// extension can never talk to Nio Downloader.
 //
 // The e2e tests run under the NODE RAL (installed in src/__tests__/setup.ts),
 // so they would NOT catch removal of the browser RAL import from the SW entry.

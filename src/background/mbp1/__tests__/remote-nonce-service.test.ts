@@ -210,7 +210,7 @@ describe('RemoteDiscoveryService remote nonce capability', () => {
     const headers = new Headers(request?.init.headers)
     expect(headers.has('authorization')).toBe(false)
     expect(headers.has('cookie')).toBe(false)
-    expect(headers.has('x-motrix-token')).toBe(false)
+    expect(headers.has('x-nio-token')).toBe(false)
   })
 
   it('rejects a structurally forged compatible result before fetch', async () => {

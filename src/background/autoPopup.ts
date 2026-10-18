@@ -10,7 +10,7 @@ export function createAutoPopup(
   const views = new Map<Browser.runtime.Port, number>()
   browser.runtime.onConnect.addListener((port) => {
     if (
-      (port.name !== POPUP_PORT && port.name !== 'motrix.popup.presence') ||
+      port.name !== POPUP_PORT ||
       port.sender?.id !== browser.runtime.id ||
       port.sender.url !== browser.runtime.getURL('popup.html')
     )

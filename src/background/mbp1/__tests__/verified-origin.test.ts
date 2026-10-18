@@ -51,7 +51,7 @@ describe('computeVerifiedOrigin', () => {
   })
 
   it.each([
-    'safari-web-extension://app.motrix.safari.extension/',
+    'safari-web-extension://app.niodownloader.safari.extension/',
     'safari-web-extension://null/',
     'safari-web-extension://user@12345678-90AB-CDEF-1234-567890ABCDEF/',
     'safari-web-extension://12345678-90AB-CDEF-1234-567890ABCDEF:80/',

@@ -45,10 +45,10 @@ describe('deriveW (§6.2 pairing code -> scalar w)', () => {
     // each character to its low byte; this side uses UTF-8. So a non-ASCII
     // input does not merely look odd — it derives a *different* `w` on each
     // side, and the only symptom is key confirmation failing against a real
-    // Motrix. Refusing is the only behaviour that cannot silently diverge.
+    // Nio Downloader. Refusing is the only behaviour that cannot silently diverge.
     const { inputs } = MBP1_VECTORS.scryptW
-    expect(() => deriveW('MTX7K2Q9', 'nonce-é')).toThrow(/pairNonce/)
-    expect(() => deriveW('MTX7K2Qé', inputs.pairNonce)).toThrow(
+    expect(() => deriveW('N2X7K2Q9', 'nonce-é')).toThrow(/pairNonce/)
+    expect(() => deriveW('N2X7K2Qé', inputs.pairNonce)).toThrow(
       /codeNormalized/
     )
     // A pure-ASCII pair still works, so the guard is not rejecting everything.

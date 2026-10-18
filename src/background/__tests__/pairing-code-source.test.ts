@@ -3,7 +3,7 @@ import { createPairingCodeSource } from '@/background/pairing-code-source'
 
 function makeRequest(overrides: { timeoutMs?: number } = {}) {
   return {
-    instanceId: 'motrix-desktop-1',
+    instanceId: 'nio-desktop-1',
     timeoutMs: overrides.timeoutMs ?? 5000,
     run: 1,
     attemptsRemaining: 2,
@@ -97,7 +97,7 @@ describe('createPairingCodeSource', () => {
     const firstRequest = makeRequest({ timeoutMs: 1_000 })
     const replacementRequest = {
       ...makeRequest({ timeoutMs: 2_000 }),
-      instanceId: 'motrix-desktop-2',
+      instanceId: 'nio-desktop-2',
     }
     const first = source.provider(firstRequest)
     const firstOutcome = first.catch((error: unknown) => error)
@@ -110,8 +110,8 @@ describe('createPairingCodeSource', () => {
       request: replacementRequest,
       deadlineMs: expect.any(Number),
     })
-    expect(source.submit('MTX7K2Q9')).toBe(true)
-    await expect(replacement).resolves.toBe('MTX7K2Q9')
+    expect(source.submit('N2X7K2Q9')).toBe(true)
+    await expect(replacement).resolves.toBe('N2X7K2Q9')
     expect(source.getPending()).toBeNull()
   })
 })

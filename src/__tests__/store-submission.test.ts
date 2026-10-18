@@ -223,9 +223,9 @@ describe('store release provenance', () => {
     for (const [, args] of checks) {
       expect(args.slice(3)).toEqual([
         '--repo',
-        'NotUrNio/Nio-Downloader-Extension',
+        'NotUrNio/Nio-Downloader-Browser-Extension',
         '--signer-workflow',
-        'NotUrNio/Nio-Downloader-Extension/.github/workflows/release.yml',
+        'NotUrNio/Nio-Downloader-Browser-Extension/.github/workflows/release.yml',
         '--source-ref',
         `refs/tags/${tag}`,
         '--source-digest',

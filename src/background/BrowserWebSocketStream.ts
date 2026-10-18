@@ -10,7 +10,7 @@ import { Emitter } from 'vscode-jsonrpc'
 
 /**
  * Browser-side WebSocket → vscode-jsonrpc MessageReader/Writer adapter.
- * Mirrors Motrix's WebSocketMessageStream but uses the browser
+ * Mirrors Nio Downloader's WebSocketMessageStream but uses the browser
  * WebSocket event model (addEventListener + MessageEvent.data) instead
  * of Node's ws.WebSocket (EventEmitter + Buffer).
  */

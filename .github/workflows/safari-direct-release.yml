@@ -38,7 +38,7 @@ jobs:
           BUILD_NUMBER: ${{ inputs.build_number }}
         run: |
           set -euo pipefail
-          test "$GITHUB_REPOSITORY" = NotUrNio/Nio-Downloader-Extension
+          test "$GITHUB_REPOSITORY" = NotUrNio/Nio-Downloader-Browser-Extension
           test "$GITHUB_REF" = refs/heads/main
           [[ "$BUILD_NUMBER" =~ ^[1-9][0-9]{0,4}$ ]]
           test "$BUILD_NUMBER" -le 65535
@@ -118,7 +118,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          test "$GITHUB_REPOSITORY" = NotUrNio/Nio-Downloader-Extension
+          test "$GITHUB_REPOSITORY" = NotUrNio/Nio-Downloader-Browser-Extension
           test "$GITHUB_REF" = refs/heads/main
           [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]]
           gh api "repos/$GITHUB_REPOSITORY/contents/scripts/safari-release.py?ref=$GITHUB_SHA" --jq .content | base64 --decode > "$RUNNER_TEMP/safari-release.py"
@@ -181,7 +181,7 @@ jobs:
         working-directory: ${{ runner.temp }}/safari-release
         run: |
           set -euo pipefail
-          test "$GITHUB_REPOSITORY" = NotUrNio/Nio-Downloader-Extension
+          test "$GITHUB_REPOSITORY" = NotUrNio/Nio-Downloader-Browser-Extension
           test "$GITHUB_REF" = refs/heads/main
           [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
           [[ "$BUILD_NUMBER" =~ ^[1-9][0-9]{0,4}$ ]]

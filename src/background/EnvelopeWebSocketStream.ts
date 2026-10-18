@@ -5,7 +5,7 @@
  * shape exactly — `createMdxpConnection` cannot tell the difference, since
  * the only change is what sits between the socket and JSON.
  *
- * MBP1 authenticates *below* MDXP: `motrix/initialize` is the first
+ * MBP1 authenticates *below* MDXP: `nio/initialize` is the first
  * application message, and it goes inside this envelope, never before it —
  * the caller is expected to hand this reader/writer a socket only after a
  * `PairingFlow`/`ReconnectFlow` run has already verified the peer and

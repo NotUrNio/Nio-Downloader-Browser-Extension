@@ -10,7 +10,6 @@ import {
 } from '@/shared/takeover'
 
 const STORAGE_KEY = 'nio.takeoverConfig'
-const LEGACY_STORAGE_KEY = 'motrix.takeoverConfig'
 const enqueue = createOperationQueue()
 
 function isRule(v: unknown): v is TakeoverRule {
@@ -20,7 +19,7 @@ function isRule(v: unknown): v is TakeoverRule {
     typeof r.id === 'string' &&
     typeof r.match === 'object' &&
     r.match !== null &&
-    (r.action === 'motrix' || r.action === 'chrome' || r.action === 'ask')
+    (r.action === 'nio' || r.action === 'chrome' || r.action === 'ask')
   )
 }
 
@@ -30,13 +29,7 @@ export class TakeoverConfigStore {
       string,
       unknown
     >
-    let v = obj[STORAGE_KEY]
-    if (v === undefined) {
-      const legacyObj = (await browser.storage.local.get(
-        LEGACY_STORAGE_KEY
-      )) as Record<string, unknown>
-      v = legacyObj[LEGACY_STORAGE_KEY]
-    }
+    const v = obj[STORAGE_KEY]
     if (!v || typeof v !== 'object') return TAKEOVER_DEFAULT
     const c = v as Partial<TakeoverConfig> & { autoOpenPopup?: unknown }
     if (
@@ -44,7 +37,7 @@ export class TakeoverConfigStore {
       typeof c.consentAckVersion !== 'number'
     )
       return TAKEOVER_DEFAULT
-    if (c.defaultAction !== 'motrix' && c.defaultAction !== 'chrome')
+    if (c.defaultAction !== 'nio' && c.defaultAction !== 'chrome')
       return TAKEOVER_DEFAULT
     if (!Array.isArray(c.rules) || !c.rules.every(isRule))
       return TAKEOVER_DEFAULT
@@ -57,7 +50,7 @@ export class TakeoverConfigStore {
       enabled: c.enabled,
       consentAckVersion: c.consentAckVersion,
       defaultAction: c.defaultAction,
-      unknownSizeAction: c.unknownSizeAction === 'motrix' ? 'motrix' : 'chrome',
+      unknownSizeAction: c.unknownSizeAction === 'nio' ? 'nio' : 'chrome',
       rules: c.rules,
     }
   }
@@ -106,7 +99,7 @@ export class TakeoverConfigStore {
           consentAckVersion: settings.consentAckVersion,
           defaultAction: settings.defaultAction,
           unknownSizeAction:
-            settings.unknownSizeAction === 'motrix' ? 'motrix' : 'chrome',
+            settings.unknownSizeAction === 'nio' ? 'nio' : 'chrome',
           rules: settings.rules,
         },
       })

@@ -2836,7 +2836,6 @@ export function classifyConnectError(e: unknown): {
     // common state when the extension wakes and Nio Downloader simply isn't open.
     if (
       e.code === 'host-error:nio-not-running' ||
-      e.code === 'host-error:motrix-not-running' ||
       e.code === 'host-error:not-running'
     ) {
       return { level: 'info', reason: 'Nio Downloader is not running' }

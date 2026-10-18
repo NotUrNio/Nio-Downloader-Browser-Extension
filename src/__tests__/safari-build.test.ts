@@ -6,9 +6,9 @@ afterEach(() => vi.unstubAllEnvs())
 
 describe('Safari preview manifest', () => {
   it.each([undefined, 'webstore'])(
-    'remains Safari with MOTRIX_BUILD=%s',
+    'remains Safari with NIO_BUILD=%s',
     async (build) => {
-      vi.stubEnv('MOTRIX_BUILD', build)
+      vi.stubEnv('NIO_BUILD', build)
       const manifest = await manifestConfig({
         command: 'build',
         mode: 'safari',

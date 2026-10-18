@@ -58,7 +58,7 @@ export interface DiscoveryResult {
   appVersion?: string
   /** Unauthenticated compatibility hint from `GET /discovery`. It is used
    * only to fail early with an actionable upgrade message; MBP1 and
-   * `motrix/initialize` remain the authoritative checks. */
+   * `nio/initialize` remain the authoritative checks. */
   compatibility?: BackendCompatibility
 }
 
@@ -194,7 +194,7 @@ function readNonce(value: unknown): string | null {
 /**
  * Parses a `GET /discovery` body (§4.1).
  *
- * `app === 'nio-bridge'` (or legacy `'motrix-bridge'`) is the acceptance gate, and `apiVersion` is
+ * `app === 'nio-bridge'` is the acceptance gate, and `apiVersion` is
  * checked for *shape* but deliberately **not** for value. Gating a hint on a
  * version number would make a newer Nio Downloader invisible to this extension
  * entirely; version incompatibility is the wire protocol's job and surfaces as
@@ -291,7 +291,7 @@ export function readDiscoveryDoc(
   // rejects it.
   if (!body || typeof body !== 'object') return null
   const doc = body as Record<string, unknown>
-  if (doc.app !== 'nio-bridge' && doc.app !== 'motrix-bridge') return null
+  if (doc.app !== 'nio-bridge') return null
   if (typeof doc.apiVersion !== 'number' || !Number.isFinite(doc.apiVersion)) {
     return null
   }

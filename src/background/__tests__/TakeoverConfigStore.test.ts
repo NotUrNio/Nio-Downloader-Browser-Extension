@@ -34,8 +34,8 @@ describe('TakeoverConfigStore', () => {
       enabled: true,
       openTaskPanelAfterSubmit: true,
       consentAckVersion: 1,
-      defaultAction: 'motrix' as const,
-      unknownSizeAction: 'motrix' as const,
+      defaultAction: 'nio' as const,
+      unknownSizeAction: 'nio' as const,
       rules: [
         {
           id: 'r1',
@@ -54,19 +54,19 @@ describe('TakeoverConfigStore', () => {
     expect(await new TakeoverConfigStore().get()).toEqual(TAKEOVER_DEFAULT)
   })
 
-  it.each([undefined, 'invalid', 'chrome', 'motrix'])(
+  it.each([undefined, 'invalid', 'chrome', 'nio'])(
     'normalizes the unknown-size preference from existing storage: %s',
     async (unknownSizeAction) => {
       await browser.storage.local.set({
         'nio.takeoverConfig': { ...TAKEOVER_DEFAULT, unknownSizeAction },
       })
       expect((await new TakeoverConfigStore().get()).unknownSizeAction).toBe(
-        unknownSizeAction === 'motrix' ? 'motrix' : 'chrome'
+        unknownSizeAction === 'nio' ? 'nio' : 'chrome'
       )
     }
   )
 
-  it.each(['chrome', 'motrix'] as const)(
+  it.each(['chrome', 'nio'] as const)(
     'persists the selected unknown-size handler through other setting patches: %s',
     async (unknownSizeAction) => {
       const store = new TakeoverConfigStore()
@@ -88,7 +88,7 @@ describe('TakeoverConfigStore', () => {
         enabled: true,
         openTaskPanelAfterSubmit: true,
         consentAckVersion: 1,
-        defaultAction: 'motrix',
+        defaultAction: 'nio',
         rules: [{ id: 'r', match: {}, action: 'bogus' }],
       },
     })
@@ -102,7 +102,7 @@ it('migrates existing preferences with automatic popup off', async () => {
     enabled: true,
     consentAckVersion: 1,
   }
-  await browser.storage.local.set({ 'motrix.takeoverConfig': legacy })
+  await browser.storage.local.set({ 'nio.takeoverConfig': legacy })
   expect(await new TakeoverConfigStore().get()).toEqual({
     ...legacy,
     openTaskPanelAfterSubmit: false,
@@ -131,7 +131,7 @@ it.each([true, false])(
   async (autoOpenPopup) => {
     const { openTaskPanelAfterSubmit: _popup, ...legacy } = TAKEOVER_DEFAULT
     await browser.storage.local.set({
-      'motrix.takeoverConfig': { ...legacy, autoOpenPopup },
+      'nio.takeoverConfig': { ...legacy, autoOpenPopup },
     })
     const store = new TakeoverConfigStore()
     expect((await store.get()).openTaskPanelAfterSubmit).toBe(autoOpenPopup)
@@ -142,7 +142,7 @@ it.each([true, false])(
 
 it('prefers the new field over a conflicting legacy field', async () => {
   await browser.storage.local.set({
-    'motrix.takeoverConfig': { ...TAKEOVER_DEFAULT, autoOpenPopup: true },
+    'nio.takeoverConfig': { ...TAKEOVER_DEFAULT, autoOpenPopup: true },
   })
   expect((await new TakeoverConfigStore().get()).openTaskPanelAfterSubmit).toBe(
     false

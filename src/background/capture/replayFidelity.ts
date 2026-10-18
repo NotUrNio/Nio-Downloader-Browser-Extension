@@ -1,11 +1,11 @@
-// A takeover replays a download the browser already negotiated: Motrix gets
+// A takeover replays a download the browser already negotiated: Nio Downloader gets
 // the URL and re-requests it with GET. The browser's downloads API exposes
 // neither the request method nor its body, so a download the page started
 // with a form POST cannot be replayed faithfully — the same URL under GET
 // commonly serves the HTML page that hosts the form.
 //
 // We cannot see the method, but we can see the consequence: probe the URL the
-// way Motrix would and compare what comes back against what the browser said
+// way Nio Downloader would and compare what comes back against what the browser said
 // it was downloading. An HTML body where the browser expected a file is the
 // signature of that mismatch (uupdump.net being the reported case). Declining
 // leaves the native download intact, so the user still gets the right file.

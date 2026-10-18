@@ -5,7 +5,7 @@
  * never obtains a nonce automatically. A later explicit first-pair action may
  * consume the short-lived compatible-discovery capability exactly once to
  * POST `/nonce`; this module still does not open `/pair` or `/v1`, touch
- * credentials, call Native Messaging, scan loopback ports, or launch Motrix.
+ * credentials, call Native Messaging, scan loopback ports, or launch Nio Downloader.
  * Every document it returns is labelled `untrustedDocument`: only the later
  * MBP1 transcript can authenticate `instanceId` and the backend runtime.
  */
@@ -73,7 +73,7 @@ export interface RemoteDiscoveryRequestOptions {
 }
 
 export interface RemoteDiscoveryDocument {
-  readonly app: 'nio-bridge' | 'motrix-bridge'
+  readonly app: 'nio-bridge'
   readonly apiVersion: number
   readonly instanceId: string
   readonly appVersion: string
@@ -293,7 +293,7 @@ function readDiscoveryDocument(value: unknown): RemoteDiscoveryDocument | null {
   if (!isRecord(value) || !hasExactKeys(value, DISCOVERY_TOP_LEVEL_KEYS)) {
     return null
   }
-  if (value.app !== 'nio-bridge' && value.app !== 'motrix-bridge') return null
+  if (value.app !== 'nio-bridge') return null
   if (
     typeof value.apiVersion !== 'number' ||
     !Number.isSafeInteger(value.apiVersion) ||
@@ -347,7 +347,7 @@ function readDiscoveryDocument(value: unknown): RemoteDiscoveryDocument | null {
   if (mdxpVersions === null) return null
 
   return Object.freeze({
-    app: value.app as 'nio-bridge' | 'motrix-bridge',
+    app: value.app as 'nio-bridge',
     apiVersion: value.apiVersion,
     instanceId: value.instanceId,
     appVersion: value.appVersion,
@@ -669,7 +669,7 @@ function nonceUnavailable(
 }
 
 /**
- * The single MBP1 v1 nonce DTO shared with Motrix's NonceService. The Server
+ * The single MBP1 v1 nonce DTO shared with Nio Downloader's NonceService. The Server
  * lifetime is exactly 60 seconds. Rejecting any other value prevents a
  * superficially similar, non-MBP1 endpoint from being classified as ready.
  */

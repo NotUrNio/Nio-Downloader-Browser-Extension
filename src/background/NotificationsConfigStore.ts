@@ -6,7 +6,6 @@ import {
 } from '@/shared/notifications'
 
 const STORAGE_KEY = 'nio.notificationsConfig'
-const LEGACY_STORAGE_KEY = 'motrix.notificationsConfig'
 
 export class NotificationsConfigStore {
   async get(): Promise<NotificationsConfig> {
@@ -14,13 +13,7 @@ export class NotificationsConfigStore {
       string,
       unknown
     >
-    let v = obj[STORAGE_KEY]
-    if (v === undefined) {
-      const legacyObj = (await browser.storage.local.get(
-        LEGACY_STORAGE_KEY
-      )) as Record<string, unknown>
-      v = legacyObj[LEGACY_STORAGE_KEY]
-    }
+    const v = obj[STORAGE_KEY]
     const safari = getBuildBrowser() === 'safari'
     const defaults = {
       ...NOTIFICATIONS_DEFAULT,

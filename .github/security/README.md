@@ -1,6 +1,6 @@
 # Repository and store release protection
 
-These files are GitHub REST API request bodies for `NotUrNio/Nio-Downloader-Extension`.
+These files are GitHub REST API request bodies for `NotUrNio/Nio-Downloader-Browser-Extension`.
 The four `*.ruleset.json` files can also be imported individually through
 Settings → Rules → Rulesets → New ruleset → Import a ruleset. Committing these
 files does not apply the settings; GitHub does not load them automatically.
@@ -64,13 +64,13 @@ settings. Preserve unrelated settings rather than blindly weakening them.
 
 ```bash
 for store in chrome edge firefox; do
-  gh api --method PUT "repos/NotUrNio/Nio-Downloader-Extension/environments/store-$store" \
+  gh api --method PUT "repos/NotUrNio/Nio-Downloader-Browser-Extension/environments/store-$store" \
     --input .github/security/store-environment.json
-  gh api --method POST "repos/NotUrNio/Nio-Downloader-Extension/environments/store-$store/deployment-branch-policies" \
+  gh api --method POST "repos/NotUrNio/Nio-Downloader-Browser-Extension/environments/store-$store/deployment-branch-policies" \
     --input .github/security/main-deployment-policy.json
 done
 
-gh api --method PUT repos/NotUrNio/Nio-Downloader-Extension/actions/permissions/workflow \
+gh api --method PUT repos/NotUrNio/Nio-Downloader-Browser-Extension/actions/permissions/workflow \
   --input .github/security/actions-workflow-permissions.json
 ```
 
@@ -85,21 +85,21 @@ that setting, disable administrator bypass in Settings → Environments.
 List existing rulesets before importing so an update does not create duplicates:
 
 ```bash
-gh api 'repos/NotUrNio/Nio-Downloader-Extension/rulesets?includes_parents=false' \
+gh api 'repos/NotUrNio/Nio-Downloader-Browser-Extension/rulesets?includes_parents=false' \
   --jq '.[] | {id, name, enforcement}'
 
 # Create each rule only when no rule with the same name exists.
-gh api --method POST repos/NotUrNio/Nio-Downloader-Extension/rulesets \
+gh api --method POST repos/NotUrNio/Nio-Downloader-Browser-Extension/rulesets \
   --input .github/security/main-integrity.ruleset.json
-gh api --method POST repos/NotUrNio/Nio-Downloader-Extension/rulesets \
+gh api --method POST repos/NotUrNio/Nio-Downloader-Browser-Extension/rulesets \
   --input .github/security/main.ruleset.json
-gh api --method POST repos/NotUrNio/Nio-Downloader-Extension/rulesets \
+gh api --method POST repos/NotUrNio/Nio-Downloader-Browser-Extension/rulesets \
   --input .github/security/release-tag-creation.ruleset.json
-gh api --method POST repos/NotUrNio/Nio-Downloader-Extension/rulesets \
+gh api --method POST repos/NotUrNio/Nio-Downloader-Browser-Extension/rulesets \
   --input .github/security/release-tag-integrity.ruleset.json
 
 # For an existing rule, substitute its ID and the corresponding JSON file.
-gh api --method PUT repos/NotUrNio/Nio-Downloader-Extension/rulesets/RULESET_ID \
+gh api --method PUT repos/NotUrNio/Nio-Downloader-Browser-Extension/rulesets/RULESET_ID \
   --input .github/security/main.ruleset.json
 ```
 
@@ -111,17 +111,17 @@ ruleset. Keep the owner bypass confined to the PR/CI rule.
 ## Verify actual server state
 
 ```bash
-gh api repos/NotUrNio/Nio-Downloader-Extension/rules/branches/main
-gh api 'repos/NotUrNio/Nio-Downloader-Extension/rulesets?includes_parents=true'
-gh api repos/NotUrNio/Nio-Downloader-Extension/environments
+gh api repos/NotUrNio/Nio-Downloader-Browser-Extension/rules/branches/main
+gh api 'repos/NotUrNio/Nio-Downloader-Browser-Extension/rulesets?includes_parents=true'
+gh api repos/NotUrNio/Nio-Downloader-Browser-Extension/environments
 for store in chrome edge firefox; do
-  gh api "repos/NotUrNio/Nio-Downloader-Extension/environments/store-$store"
-  gh api "repos/NotUrNio/Nio-Downloader-Extension/environments/store-$store/deployment-branch-policies"
-  gh secret list --repo NotUrNio/Nio-Downloader-Extension --env "store-$store"
+  gh api "repos/NotUrNio/Nio-Downloader-Browser-Extension/environments/store-$store"
+  gh api "repos/NotUrNio/Nio-Downloader-Browser-Extension/environments/store-$store/deployment-branch-policies"
+  gh secret list --repo NotUrNio/Nio-Downloader-Browser-Extension --env "store-$store"
 done
-gh secret list --repo NotUrNio/Nio-Downloader-Extension
-gh api repos/NotUrNio/Nio-Downloader-Extension/actions/organization-secrets --jq '.secrets[].name'
-gh api repos/NotUrNio/Nio-Downloader-Extension/actions/permissions/workflow
+gh secret list --repo NotUrNio/Nio-Downloader-Browser-Extension
+gh api repos/NotUrNio/Nio-Downloader-Browser-Extension/actions/organization-secrets --jq '.secrets[].name'
+gh api repos/NotUrNio/Nio-Downloader-Browser-Extension/actions/permissions/workflow
 ```
 
 Confirm the required reviewer, no admin bypass, exactly one `main` branch policy

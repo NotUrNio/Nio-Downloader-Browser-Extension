@@ -43,7 +43,7 @@ export async function confirmInterceptedDownload(
     'url=',
     describeUrlForLog(target.url)
   )
-  if (decision !== 'motrix') return
+  if (decision !== 'nio') return
   const guard = capturedGuard ?? (await deps.captureGuard())
   if (!guard) return
   const windowId = await capturedWindow

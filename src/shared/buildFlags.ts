@@ -1,19 +1,11 @@
-declare const __NIO_BUILD__: 'webstore' | 'full' | undefined
-declare const __MOTRIX_BUILD__: 'webstore' | 'full' | undefined
-
 export const BUILD_VARIANT: 'webstore' | 'full' =
-  typeof __NIO_BUILD__ === 'string'
-    ? __NIO_BUILD__
-    : typeof __MOTRIX_BUILD__ === 'string'
-      ? __MOTRIX_BUILD__
-      : 'full'
+  typeof __NIO_BUILD__ === 'string' ? __NIO_BUILD__ : 'full'
 
 export function isWebStoreBuild(): boolean {
   return BUILD_VARIANT === 'webstore'
 }
 
 declare const __NIO_DEV_PAIR_BACKOFF_MS__: number | undefined
-declare const __MOTRIX_DEV_PAIR_BACKOFF_MS__: number | undefined
 
 /**
  * Local-debug override for the §7.3 first-pair backoff base window
@@ -27,7 +19,5 @@ export const DEV_PAIR_BACKOFF_MS: number | undefined =
   BUILD_VARIANT !== 'webstore'
     ? typeof __NIO_DEV_PAIR_BACKOFF_MS__ === 'number'
       ? __NIO_DEV_PAIR_BACKOFF_MS__
-      : typeof __MOTRIX_DEV_PAIR_BACKOFF_MS__ === 'number'
-        ? __MOTRIX_DEV_PAIR_BACKOFF_MS__
-        : undefined
+      : undefined
     : undefined

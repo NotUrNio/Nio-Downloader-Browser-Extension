@@ -14,7 +14,7 @@ export function buildSubmitParams(
   cookies: Cookie[],
   headers: Record<string, string>
 ): DownloadSubmitParams {
-  // An empty hint is valid MDXP and lets Motrix discover Content-Disposition.
+  // An empty hint is valid MDXP and lets Nio Downloader discover Content-Disposition.
   // A URL basename is useful for display, but is not a user-chosen filename.
   const suggestedFilename =
     t.filenameFromUrl && !isMagnetUrl(t.url) ? '' : t.suggestedFilename

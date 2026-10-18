@@ -92,7 +92,7 @@ describe('normalizeTarget', () => {
 
   it('derives the last real segment for a trailing-slash watch URL (bilibili /video/BVxxx/)', () => {
     // Regression: a trailing slash used to yield '' → a meaningless "(1)"
-    // filename once it reached Motrix. The last real segment is the bvid.
+    // filename once it reached Nio Downloader. The last real segment is the bvid.
     const t = normalizeTarget({
       url: 'https://www.bilibili.com/video/BV14vJg6ZEd4/',
       origin: 'context-menu',

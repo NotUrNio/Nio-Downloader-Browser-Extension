@@ -20,7 +20,7 @@ function cfg(over: Partial<TakeoverConfig> = {}): TakeoverConfig {
   return {
     enabled: true,
     consentAckVersion: 1,
-    defaultAction: 'motrix',
+    defaultAction: 'nio',
     unknownSizeAction: 'chrome',
     rules: [],
     ...over,
@@ -32,22 +32,22 @@ describe('decideTakeover', () => {
     expect(decideTakeover(cfg({ enabled: false }), target())).toBe('chrome')
   })
 
-  it('always routes an explicit context-menu pick to motrix even when disabled', () => {
-    // A right-click "Download with Motrix" is explicit user intent, not a
+  it('always routes an explicit context-menu pick to nio even when disabled', () => {
+    // A right-click "Download with Nio Downloader" is explicit user intent, not a
     // candidate for the auto-interception opt-in. It must hand off regardless
     // of config.enabled — otherwise the right-click silently does nothing
-    // whenever "Send eligible downloads to Motrix" is off.
+    // whenever "Send eligible downloads to Nio Downloader" is off.
     expect(
       decideTakeover(
         cfg({ enabled: false }),
         target({ origin: 'context-menu' })
       )
-    ).toBe('motrix')
+    ).toBe('nio')
   })
 
-  it('routes a context-menu pick to motrix even when a rule would send it to chrome', () => {
+  it('routes a context-menu pick to nio even when a rule would send it to chrome', () => {
     // Auto-interception rules decide which browser-initiated downloads to
-    // grab; they are irrelevant to an explicit pick. The user chose Motrix.
+    // grab; they are irrelevant to an explicit pick. The user chose Nio Downloader.
     const c = cfg({
       rules: [
         { id: 'd', match: { domains: ['example.com'] }, action: 'chrome' },
@@ -61,11 +61,11 @@ describe('decideTakeover', () => {
           url: 'https://cdn.example.com/big.zip',
         })
       )
-    ).toBe('motrix')
+    ).toBe('nio')
   })
 
-  it('defaults to motrix when enabled and no rule matches', () => {
-    expect(decideTakeover(cfg(), target())).toBe('motrix')
+  it('defaults to nio when enabled and no rule matches', () => {
+    expect(decideTakeover(cfg(), target())).toBe('nio')
   })
 
   it('denylist host-suffix match routes to chrome (first match wins)', () => {
@@ -89,13 +89,13 @@ describe('decideTakeover', () => {
     expect(decideTakeover(c, download)).toBe('chrome')
     expect(
       decideTakeover(c, { ...download, pageUrl: 'https://notexample.com/page' })
-    ).toBe('motrix')
+    ).toBe('nio')
     expect(decideTakeover(c, { ...download, origin: 'context-menu' })).toBe(
-      'motrix'
+      'nio'
     )
   })
 
-  it('below-threshold rule routes small files to chrome; large stay motrix', () => {
+  it('below-threshold rule routes small files to chrome; large stay nio', () => {
     const c = cfg({
       rules: [{ id: 't', match: { minSizeMB: 10 }, action: 'chrome' }],
     })
@@ -103,7 +103,7 @@ describe('decideTakeover', () => {
       'chrome'
     )
     expect(decideTakeover(c, target({ sizeBytes: 50 * 1024 * 1024 }))).toBe(
-      'motrix'
+      'nio'
     )
   })
 
@@ -114,7 +114,7 @@ describe('decideTakeover', () => {
     expect(decideTakeover(c, target({ sizeBytes: null }))).toBe('chrome')
     expect(
       decideTakeover(c, target({ sizeBytes: null, origin: 'context-menu' }))
-    ).toBe('motrix')
+    ).toBe('nio')
   })
 
   it('takes over files exactly at the minimum size', () => {
@@ -122,11 +122,11 @@ describe('decideTakeover', () => {
       rules: [{ id: 't', match: { minSizeMB: 10 }, action: 'chrome' }],
     })
     expect(decideTakeover(c, target({ sizeBytes: 10 * 1024 * 1024 }))).toBe(
-      'motrix'
+      'nio'
     )
   })
 
-  it.each(['chrome', 'motrix'] as const)(
+  it.each(['chrome', 'nio'] as const)(
     'routes unknown sizes to the selected handler: %s, with or without a minimum',
     (unknownSizeAction) => {
       for (const rules of [
@@ -141,9 +141,9 @@ describe('decideTakeover', () => {
     }
   )
 
-  it('still leaves known small files in the browser when unknown sizes go to Motrix', () => {
+  it('still leaves known small files in the browser when unknown sizes go to Nio Downloader', () => {
     const c = cfg({
-      unknownSizeAction: 'motrix',
+      unknownSizeAction: 'nio',
       rules: [{ id: 't', match: { minSizeMB: 10 }, action: 'chrome' }],
     })
     expect(decideTakeover(c, target({ sizeBytes: 1024 }))).toBe('chrome')
@@ -151,7 +151,7 @@ describe('decideTakeover', () => {
 
   it('honors site exclusions and disabled takeover before the unknown-size choice', () => {
     const c = cfg({
-      unknownSizeAction: 'motrix',
+      unknownSizeAction: 'nio',
       rules: [
         { id: 'site', match: { domains: ['example.com'] }, action: 'chrome' },
       ],
@@ -159,18 +159,18 @@ describe('decideTakeover', () => {
     expect(decideTakeover(c, target({ sizeBytes: null }))).toBe('chrome')
     expect(
       decideTakeover(
-        cfg({ enabled: false, unknownSizeAction: 'motrix' }),
+        cfg({ enabled: false, unknownSizeAction: 'nio' }),
         target({ sizeBytes: null })
       )
     ).toBe('chrome')
   })
 
-  it('does not use an unknown size as evidence for a Motrix allow rule', () => {
+  it('does not use an unknown size as evidence for a Nio Downloader allow rule', () => {
     expect(
       decideTakeover(
         cfg({
           defaultAction: 'chrome',
-          rules: [{ id: 't', match: { minSizeMB: 10 }, action: 'motrix' }],
+          rules: [{ id: 't', match: { minSizeMB: 10 }, action: 'nio' }],
         }),
         target({ sizeBytes: null })
       )

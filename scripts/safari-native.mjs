@@ -55,8 +55,8 @@ if (args.has('--help')) {
   console.log(
     'Generate a macOS Safari native messaging development harness from dist/safari.\n' +
       'Use --build for an ad-hoc app, or --build --signed to use the signing configured in Xcode.\n' +
-      'Add --bootstrap with MOTRIX_NATIVE_HOST_SOURCE to embed the signed Rust-backed XPC service.\n' +
-      'Use --bootstrap-client-only when the Motrix desktop app owns the service; the Safari app retains its sandbox.\n' +
+      'Add --bootstrap with NIODOWNLOADER_NATIVE_HOST_SOURCE to embed the signed Rust-backed XPC service.\n' +
+      'Use --bootstrap-client-only when the Nio Downloader desktop app owns the service; the Safari app retains its sandbox.\n' +
       'Add --archive with NIODOWNLOADER_SAFARI_RELEASE=1 for a universal Release archive without development probes; this does not export or upload.\n' +
       'CI: use --archive --unsigned-archive --build --bootstrap-client-only with NIODOWNLOADER_SAFARI_TEAM_ID and NIODOWNLOADER_SAFARI_BUILD_NUMBER; no signing credentials are required.\n' +
       'For local testing, --bootstrap-development-host removes only the container app sandbox so it can register this service.\n' +
@@ -202,7 +202,7 @@ if (verificationPort !== undefined) {
   )
   writeFileSync(
     join(resources, 'popup.html'),
-    '<!doctype html><meta charset="utf-8"><title>Motrix Native Verification</title><body style="width:440px;min-height:240px;padding:16px;font:14px system-ui"><h1>Motrix Native Verification</h1><pre id="verification-status" style="white-space:pre-wrap">Starting…</pre><script type="module" src="native-probe.js"></script>'
+    '<!doctype html><meta charset="utf-8"><title>Nio Native Verification</title><body style="width:440px;min-height:240px;padding:16px;font:14px system-ui"><h1>Nio Native Verification</h1><pre id="verification-status" style="white-space:pre-wrap">Starting…</pre><script type="module" src="native-probe.js"></script>'
   )
 }
 
@@ -240,7 +240,6 @@ if (!existsSync(project)) {
     const content = readFileSync(path, 'utf8')
       .replaceAll(`${bundleIdentifier}.Extension`, extensionIdentifier)
       .replaceAll(generatedAppIdentifier, bundleIdentifier)
-      .replaceAll('app.motrix.Motrix-Extension-for-Safari', bundleIdentifier)
     writeFileSync(path, content)
   }
 } else {

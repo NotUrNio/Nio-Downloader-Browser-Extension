@@ -505,7 +505,7 @@ describe('RemoteDiscoveryService', () => {
 
   it.each([
     ['missing field', { appVersion: undefined }],
-    ['wrong app', { app: 'not-motrix' }],
+    ['wrong app', { app: 'not-nio' }],
     ['fractional apiVersion', { apiVersion: 1.5 }],
     ['non-printable instanceId', { instanceId: 'server\nname' }],
     ['non-ASCII instanceId', { instanceId: '服务器' }],

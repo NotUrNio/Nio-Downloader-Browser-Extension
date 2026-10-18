@@ -47,7 +47,7 @@ describe('MessageBus', () => {
     bus.on('bg.getState', async () => ({
       state: 'connected' as const,
       server: {
-        name: 'motrix',
+        name: 'niodownloader',
         version: '2.0',
         runtime: 'electron' as const,
       },
@@ -57,7 +57,7 @@ describe('MessageBus', () => {
     const res = await fire({ kind: 'bg.getState', payload: undefined })
     expect(res).toEqual({
       state: 'connected',
-      server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+      server: { name: 'niodownloader', version: '2.0', runtime: 'electron' },
     })
   })
 

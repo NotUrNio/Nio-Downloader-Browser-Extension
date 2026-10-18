@@ -31,7 +31,7 @@ describe('MBP1 NM bootstrap (§9.1)', () => {
       bindingPub: expect.any(String),
       allowLaunch: true,
     })
-    // Line A's NM host only wakes Motrix when this field is literally `true`,
+    // Line A's NM host only wakes Nio Downloader when this field is literally `true`,
     // so assert the exact primitive rather than a truthy value.
     expect(request.allowLaunch).toBe(true)
     expect(b64uDecode(request.bindingPub)).toEqual(kp.pub)

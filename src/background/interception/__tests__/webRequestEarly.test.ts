@@ -131,7 +131,7 @@ it.each([
   expect(await listener(request())).toEqual({})
   expect(submit).not.toHaveBeenCalled()
 })
-it.each(['chrome', 'motrix'] as const)(
+it.each(['chrome', 'nio'] as const)(
   'honors unknown size action %s',
   async (action) => {
     cfg.unknownSizeAction = action
@@ -144,7 +144,7 @@ it.each(['chrome', 'motrix'] as const)(
           ],
         })
       )
-    ).toEqual(action === 'motrix' ? { cancel: true } : {})
+    ).toEqual(action === 'nio' ? { cancel: true } : {})
   }
 )
 it.each([

@@ -185,7 +185,7 @@ describe('confirmation before the first request', () => {
     expect(extensionBrowser.downloads.download).not.toHaveBeenCalled()
   })
   it.each(['cancel', 'browser'])(
-    'honors %s without sending to Motrix',
+    'honors %s without sending to Nio Downloader',
     async (action) => {
       const f = confirmedFixture()
       const running = f.run(f.target, 4)

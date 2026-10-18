@@ -56,7 +56,6 @@ import { extensionBrowser as browser } from '@/shared/browser'
 import { createOperationQueue } from '@/background/mbp1/operation-queue'
 
 const STORAGE_KEY = 'nio.mbp1.clientInstallationId'
-const LEGACY_STORAGE_KEY = 'motrix.mbp1.clientInstallationId'
 
 interface StoredClientInstallationId {
   version: 1
@@ -100,13 +99,7 @@ async function read(): Promise<string | null> {
     string,
     unknown
   >
-  let value = obj[STORAGE_KEY]
-  if (value === undefined) {
-    const legacy = (await browser.storage.local.get(
-      LEGACY_STORAGE_KEY
-    )) as Record<string, unknown>
-    value = legacy[LEGACY_STORAGE_KEY]
-  }
+  const value = obj[STORAGE_KEY]
   return readStoredId(value)
 }
 

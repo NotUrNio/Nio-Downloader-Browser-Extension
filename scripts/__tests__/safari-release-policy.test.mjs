@@ -60,7 +60,7 @@ test('requires signed client-only release archives', () => {
 for (const name of [
   'NIODOWNLOADER_SAFARI_FEATURE_PROBE',
   'NIODOWNLOADER_SAFARI_VERIFY_PORT',
-  'MOTRIX_DEV_PAIR_BACKOFF_MS',
+  'NIO_DEV_PAIR_BACKOFF_MS',
 ]) {
   test(`rejects inherited ${name}`, () => {
     assert.throws(() =>

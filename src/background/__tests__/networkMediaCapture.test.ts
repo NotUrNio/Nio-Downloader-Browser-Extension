@@ -794,7 +794,7 @@ describe('registerNetworkMediaCapture', () => {
   })
 
   it('excludes third-party resources when the top Web Store page is YouTube', async () => {
-    const pageUrl = 'https://www.youtube.com/watch?v=motrix'
+    const pageUrl = 'https://www.youtube.com/watch?v=niodownloader'
     const harness = setup({
       webStore: true,
       tabResults: [{ url: pageUrl, title: 'YouTube' }],

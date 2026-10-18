@@ -1,6 +1,6 @@
 import { extensionBrowser as browser } from '@/shared/browser'
 /**
- * Durable, authority-scoped consent for a remote Motrix Server.
+ * Durable, authority-scoped consent for a remote Nio Downloader Server.
  *
  * Pairing authenticates a Server; it does not authorize browser data to leave
  * this device. This store keeps that second decision separately and binds it
@@ -33,7 +33,6 @@ import {
 import { createOperationQueue } from '@/background/mbp1/operation-queue'
 
 const STORAGE_KEY = 'nio.remoteBackendPolicies'
-const LEGACY_STORAGE_KEY = 'motrix.remoteBackendPolicies'
 export const REMOTE_BACKEND_POLICY_VERSION = 1 as const
 
 const MAX_AUTHENTICATED_INSTANCE_ID_LENGTH = 128
@@ -312,17 +311,8 @@ async function loadStoredSet(forMutation: boolean): Promise<StoredSetRead> {
     string,
     unknown
   >
-  let value = object[STORAGE_KEY]
-  let hasKey = Object.hasOwn(object, STORAGE_KEY)
-  if (!hasKey) {
-    const legacy = (await browser.storage.local.get(
-      LEGACY_STORAGE_KEY
-    )) as Record<string, unknown>
-    if (Object.hasOwn(legacy, LEGACY_STORAGE_KEY)) {
-      value = legacy[LEGACY_STORAGE_KEY]
-      hasKey = true
-    }
-  }
+  const value = object[STORAGE_KEY]
+  const hasKey = Object.hasOwn(object, STORAGE_KEY)
   const result = readStoredSet(value, hasKey)
   if (forMutation && result.kind === 'future') {
     throw new UnsupportedRemoteBackendPolicyVersionError()

@@ -57,7 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         guard response.actionIdentifier == UNNotificationDefaultActionIdentifier,
-              (response.notification.request.identifier.hasPrefix("nio.") || response.notification.request.identifier.hasPrefix("motrix.")) else {
+              response.notification.request.identifier.hasPrefix("nio.") else {
             completionHandler()
             return
         }

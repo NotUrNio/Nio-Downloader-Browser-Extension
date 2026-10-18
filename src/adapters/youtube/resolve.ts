@@ -7,8 +7,8 @@ import type { UrlResolveParams, UrlResolveResult } from '@niodownloader/mdxp'
  * NOT implemented — that lands in Plan 04.
  *
  * For Plan 03b validation this is enough:
- *   - Motrix sees a spec-compliant url/resolve response
- *   - Motrix surfaces a "downloadable" item (the download itself fails
+ *   - Nio Downloader sees a spec-compliant url/resolve response
+ *   - Nio Downloader surfaces a "downloadable" item (the download itself fails
  *     because the placeholder URL is obviously not a real CDN URL —
  *     Plan 03b explicitly accepts this behaviour).
  */

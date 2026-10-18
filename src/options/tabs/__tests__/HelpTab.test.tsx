@@ -57,7 +57,7 @@ describe('HelpTab', () => {
       expect.arrayContaining([LINKS.issues, LINKS.docs])
     )
     expect(LINKS.docs).toBe(
-      'https://github.com/NotUrNio/Nio-Downloader-Extension#readme'
+      'https://github.com/NotUrNio/Nio-Downloader-Browser-Extension#readme'
     )
     expect(links.every((link) => link.getAttribute('role') === null)).toBe(true)
     expect(container.querySelector('.lucide-external-link')).toBeNull()

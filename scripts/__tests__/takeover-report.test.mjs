@@ -62,7 +62,7 @@ test('rejects evidence from a different revision or browser', () => {
 test('rejects a mislabeled backend and absent network evidence', () => {
   for (const mutate of [
     (report) => {
-      report.backend = 'real-motrix'
+      report.backend = 'unsupported-backend'
     },
     (report) => {
       report.cases[0].result.requests = []

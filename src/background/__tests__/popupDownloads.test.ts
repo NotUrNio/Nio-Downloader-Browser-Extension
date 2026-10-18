@@ -16,7 +16,7 @@ const sender = {
 const media = {
   kind: 'hls' as const,
   url: 'https://cdn.example/master.m3u8',
-  pageUrl: 'https://www.youtube.com/watch?v=motrix',
+  pageUrl: 'https://www.youtube.com/watch?v=niodownloader',
   pageTitle: 'Watch',
   detectedAt: 1,
 }

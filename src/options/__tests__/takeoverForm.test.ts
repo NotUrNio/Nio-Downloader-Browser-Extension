@@ -18,7 +18,7 @@ describe('takeoverForm', () => {
       downloadMode: 'direct',
       enabled: true,
       thresholdMB: '10',
-      unknownSizeAction: 'motrix' as const,
+      unknownSizeAction: 'nio' as const,
       denylist: 'ads.example.com\ntracker.test',
     }
     const cfg = formToConfig(form, TAKEOVER_DEFAULT.consentAckVersion)

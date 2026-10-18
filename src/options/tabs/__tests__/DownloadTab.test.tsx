@@ -32,7 +32,7 @@ beforeEach(() => {
       return {
         enabled: false,
         consentAckVersion: 0,
-        defaultAction: 'motrix',
+        defaultAction: 'nio',
         rules: [],
       } satisfies TakeoverConfig
     }
@@ -59,7 +59,7 @@ describe('DownloadTab', () => {
       })
     )
     await user.click(screen.getByRole('button', { name: /apply/i }))
-    await waitFor(() => expect(savedTakeover?.unknownSizeAction).toBe('motrix'))
+    await waitFor(() => expect(savedTakeover?.unknownSizeAction).toBe('nio'))
     first.unmount()
 
     render(<DownloadTab />)
@@ -113,7 +113,7 @@ describe('DownloadTab', () => {
         return {
           enabled: true,
           consentAckVersion: 1,
-          defaultAction: 'motrix',
+          defaultAction: 'nio',
           rules: [],
         }
       return originalSend(env)
@@ -161,7 +161,7 @@ describe('DownloadTab', () => {
         return {
           enabled: false,
           consentAckVersion: 0,
-          defaultAction: 'motrix',
+          defaultAction: 'nio',
           rules: [],
         } satisfies TakeoverConfig
       }

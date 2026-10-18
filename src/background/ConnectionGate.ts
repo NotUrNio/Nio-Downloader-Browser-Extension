@@ -22,7 +22,6 @@ import {
 import { createOperationQueue } from '@/background/mbp1/operation-queue'
 
 const STORAGE_KEY = 'nio.connectionGate'
-const LEGACY_STORAGE_KEY = 'motrix.connectionGate'
 const STORAGE_VERSION = 2 as const
 const DEFAULT_PAIR_PENDING_MS = 90_000
 const MAX_LAST_ERROR_LENGTH = 512
@@ -201,13 +200,7 @@ async function loadSet(forMutation: boolean): Promise<ReadResult> {
     string,
     unknown
   >
-  let raw = obj[STORAGE_KEY]
-  if (raw === undefined) {
-    const legacy = (await browser.storage.local.get(
-      LEGACY_STORAGE_KEY
-    )) as Record<string, unknown>
-    raw = legacy[LEGACY_STORAGE_KEY]
-  }
+  const raw = obj[STORAGE_KEY]
   const result = readStoredSet(raw)
   if (forMutation && result.kind === 'future') {
     throw new UnsupportedConnectionGateVersionError()

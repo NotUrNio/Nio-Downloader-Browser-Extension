@@ -130,7 +130,7 @@ function suggestedFilename(value: unknown): string | undefined {
   const text = boundedText(value, MAX_FILENAME_LENGTH)
   if (!text) return undefined
   // A page may suggest a leaf name, never a native path. The submission layer
-  // sanitizes once more before the value reaches Motrix.
+  // sanitizes once more before the value reaches Nio Downloader.
   const leaf = text.split(/[\\/]/).at(-1)?.trim()
   return leaf || undefined
 }

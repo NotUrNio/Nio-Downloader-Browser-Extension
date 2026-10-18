@@ -6,7 +6,7 @@ import manifestConfig from '#manifest-config'
 // test there). Native messaging on Firefox only works while both sides agree,
 // so changing the ID here requires changing the desktop allowlist in the same
 // release — and vice versa.
-const STORE_SIGNED_GECKO_ID = 'nio-downloader-extension@mozilla.org'
+const STORE_SIGNED_GECKO_ID = '{f3165928-2a14-4142-88b8-561b818602a6}'
 
 describe('manifest identity', () => {
   it('declares the store-signed Gecko ID for Firefox builds', async () => {

@@ -39,7 +39,7 @@ describe('client -> server frame shapes (interop contract)', () => {
   it('accepts a Safari bundle claim and ticket browser without changing protocol v1', () => {
     const frame = buildPairHello({
       browser: 'safari',
-      claimedExtensionId: 'app.motrix.safari.extension',
+      claimedExtensionId: 'app.niodownloader.safari.extension',
       clientInstallationId: 'safari-installation',
       ticketBindingKey: b32,
       nmTicket: {
@@ -48,7 +48,7 @@ describe('client -> server frame shapes (interop contract)', () => {
         protocolVersion: 1,
         serverGeneration: 'generation',
         browser: 'safari',
-        callerId: 'app.motrix.safari.extension',
+        callerId: 'app.niodownloader.safari.extension',
         exp: 1_800_000_000,
         bindingPub: b32,
         mac: b32,
@@ -60,7 +60,7 @@ describe('client -> server frame shapes (interop contract)', () => {
   it('pairHello carries exactly six fields when ticketless', () => {
     const frame = buildPairHello({
       browser: 'firefox',
-      claimedExtensionId: 'motrix@example.org',
+      claimedExtensionId: 'nio@example.org',
       clientInstallationId: 'cid-1',
     })
     expect(keys(frame)).toEqual([

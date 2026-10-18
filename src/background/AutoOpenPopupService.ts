@@ -5,7 +5,6 @@ import type { PopupReceipt } from '@/shared/autoPopup'
 import type { TakeoverConfig } from '@/shared/takeover'
 
 const STORAGE_KEY = 'nio.autoPopup.v1'
-const LEGACY_STORAGE_KEY = 'motrix.autoPopup.v1'
 const BATCH_GAP_MS = 10_000
 interface Batch {
   windowId: number
@@ -79,13 +78,7 @@ export class AutoOpenPopupService {
 
   private async read(): Promise<SessionState> {
     const records = await this.deps.storage.get(STORAGE_KEY)
-    let raw = records[STORAGE_KEY] as Partial<SessionState> | undefined
-    if (!raw) {
-      const legacyRecords = await this.deps.storage.get(LEGACY_STORAGE_KEY)
-      raw = legacyRecords[LEGACY_STORAGE_KEY] as
-        | Partial<SessionState>
-        | undefined
-    }
+    const raw = records[STORAGE_KEY] as Partial<SessionState> | undefined
     return {
       batches: Array.isArray(raw?.batches)
         ? raw.batches

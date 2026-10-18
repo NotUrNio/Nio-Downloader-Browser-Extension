@@ -3,7 +3,6 @@ import { i18n } from '@/shared/i18n'
 import type { Notify } from '@/shared/notifications'
 
 const KEY = 'nio.takeover.lastPairNudgeAt'
-const LEGACY_KEY = 'motrix.takeover.lastPairNudgeAt'
 const WINDOW_MS = 24 * 60 * 60 * 1000
 
 export interface PairNudgeDeps {
@@ -24,14 +23,7 @@ export class PairNudge {
       string,
       unknown
     >
-    let last = obj[KEY]
-    if (last === undefined) {
-      const legacyObj = (await browser.storage.local.get(LEGACY_KEY)) as Record<
-        string,
-        unknown
-      >
-      last = legacyObj[LEGACY_KEY]
-    }
+    const last = obj[KEY]
     // lastAt === 0 means "never nudged" — fire immediately regardless of t
     const lastAt = typeof last === 'number' && last > 0 ? last : 0
     const t = this.now()

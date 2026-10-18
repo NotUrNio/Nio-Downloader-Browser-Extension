@@ -29,7 +29,7 @@ enum DesktopBootstrapRegistrar {
         do {
             guard CommandLine.arguments.count == 2,
                   ["--status", "--register", "--unregister"].contains(CommandLine.arguments[1]),
-                  (Bundle.main.bundleIdentifier == "app.niodownloader.native" || Bundle.main.bundleIdentifier == "app.motrix.native")
+                  Bundle.main.bundleIdentifier == "app.niodownloader.native"
             else { throw BootstrapIPCError.invalidRequest }
             let configuration = try signedBootstrapConfiguration()
             let registrarConfiguration = try BootstrapIPCConfiguration(
@@ -43,14 +43,10 @@ enum DesktopBootstrapRegistrar {
             let expectedAppId = Bundle.main.bundleIdentifier ?? "app.niodownloader.native"
             try verifyCode(at: bundle, requirement:
                 "anchor apple generic and certificate leaf[subject.OU] = \"\(configuration.teamIdentifier)\" and identifier \"\(expectedAppId)\"")
-            let serviceExecutable = FileManager.default.fileExists(atPath: bundle.appendingPathComponent("Contents/Library/LaunchServices/NioSafariBootstrap").path)
-                ? "Contents/Library/LaunchServices/NioSafariBootstrap"
-                : "Contents/Library/LaunchServices/MotrixSafariBootstrap"
+            let serviceExecutable = "Contents/Library/LaunchServices/NioSafariBootstrap"
             try verifyCode(at: bundle.appendingPathComponent(serviceExecutable),
                            requirement: configuration.serviceSigningRequirement)
-            let plistName = FileManager.default.fileExists(atPath: bundle.appendingPathComponent("Contents/Library/LaunchAgents/app.niodownloader.safari.bootstrap.plist").path)
-                ? "app.niodownloader.safari.bootstrap.plist"
-                : "app.motrix.safari.bootstrap.plist"
+            let plistName = "app.niodownloader.safari.bootstrap.plist"
             let plist = bundle.appendingPathComponent("Contents/Library/LaunchAgents/\(plistName)")
             guard FileManager.default.fileExists(atPath: plist.path) else { throw BootstrapIPCError.invalidConfiguration }
             let service = SMAppService.agent(plistName: plistName)

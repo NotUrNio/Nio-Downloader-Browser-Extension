@@ -213,10 +213,14 @@ function makeFakeConn(): MdxpConnection {
   return {
     listen: vi.fn(),
     sendRequest: vi.fn(async (method: string) => {
-      if (method === 'nio/initialize' || method === 'motrix/initialize') {
+      if (method === 'nio/initialize') {
         return {
           protocolVersion: '1.0',
-          server: { name: 'motrix', version: '2.0', runtime: 'electron' },
+          server: {
+            name: 'niodownloader',
+            version: '2.0',
+            runtime: 'electron',
+          },
           capabilities: {
             ffmpegAvailable: true,
             selectionKinds: ['direct'],
@@ -239,10 +243,10 @@ function makeFakeConn(): MdxpConnection {
 function makeFakeServerConn(): MdxpConnection {
   const conn = makeFakeConn()
   vi.mocked(conn.sendRequest).mockImplementation(async (method: string) => {
-    if (method === 'nio/initialize' || method === 'motrix/initialize') {
+    if (method === 'nio/initialize') {
       return {
         protocolVersion: '1.0',
-        server: { name: 'motrix', version: '2.0', runtime: 'server' },
+        server: { name: 'niodownloader', version: '2.0', runtime: 'server' },
         capabilities: {
           ffmpegAvailable: true,
           selectionKinds: ['direct'],
@@ -1576,9 +1580,9 @@ describe('ConnectionManager MBP1 — recovery-order walk', () => {
   })
 
   // H1: the exact scenario an unattended MV3 wake reproduces — a stored
-  // credential that no longer authenticates (Motrix restarted, or the user
-  // revoked pairing from Motrix's own UI while the worker was asleep) must
-  // NOT put an unrequested approval dialog on the user's Motrix. §6.7/§12
+  // credential that no longer authenticates (Nio Downloader restarted, or the user
+  // revoked pairing from Nio Downloader's own UI while the worker was asleep) must
+  // NOT put an unrequested approval dialog on the user's Nio Downloader. §6.7/§12
   // require fresh code-entry pairing to wait for the user or an explicit
   // revocation; an unattended attempt that exhausts the recovery order must
   // land in `disconnected` instead, with the retained credential untouched.
@@ -2705,7 +2709,7 @@ describe('ConnectionManager MBP1 — closes the channel on a post-flow.run() fai
 
 describe('ConnectionManager MBP1 — autostart with a stored credential', () => {
   // autostart() is a background SW-startup probe: it must never wake
-  // Motrix (`allowLaunch: false`) and it never speaks for the user
+  // Nio Downloader (`allowLaunch: false`) and it never speaks for the user
   // (`userInitiated: false`, so an exhausted recovery order lands in
   // disconnected rather than falling back to fresh pairing). Both
   // guarantees are also covered by the exhausted-order test below: an
